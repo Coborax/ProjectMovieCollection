@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -20,7 +21,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <ListView prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="categoryList" prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
       <VBox>
@@ -30,7 +31,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <ListView prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="movieList" prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
       <HBox spacing="10.0">
@@ -47,20 +48,8 @@
                   </ImageView>
                   <HBox prefHeight="21.0" prefWidth="268.0" spacing="5.0">
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="275.0" text="Button" HBox.hgrow="ALWAYS" />
-                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="275.0" text="Button" />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="21.0" prefWidth="268.0" spacing="5.0">
-                     <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="275.0" text="Button" HBox.hgrow="ALWAYS" />
-                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="275.0" text="Button" />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="21.0" prefWidth="268.0" spacing="5.0">
-                     <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="275.0" text="Button" HBox.hgrow="ALWAYS" />
-                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="275.0" text="Button" />
+                        <TextField fx:id="movieDBID" />
+                        <Button alignment="CENTER" layoutX="84.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadDataFromMovieDB" prefHeight="25.0" prefWidth="275.0" text="Load from The Movie DB" />
                      </children>
                   </HBox>
                </children>

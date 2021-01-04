@@ -10,6 +10,8 @@ module jkm {
     requires com.fasterxml.jackson.databind;
     requires  com.fasterxml.jackson.annotation;
 
+    requires org.apache.commons.io;
+
     opens ProjectMovieCollection.gui.controller to javafx.fxml;
     opens ProjectMovieCollection to javafx.graphics;
     exports ProjectMovieCollection;
