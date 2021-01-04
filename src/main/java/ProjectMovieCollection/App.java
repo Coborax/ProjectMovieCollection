@@ -21,6 +21,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("view/chooseDirectory"));
         stage.setScene(scene);
         stage.show();
+        stage.setTitle("Project Movie Collection");
 
         MovieDBProvider provider = new MovieDBProvider();
         provider.getMovieImage(508442);
