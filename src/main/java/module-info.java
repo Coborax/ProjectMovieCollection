@@ -5,6 +5,8 @@ module jkm {
     requires java.sql;
     requires java.naming;
 
-    opens ProjectMovieCollection to javafx.fxml;
+    opens ProjectMovieCollection.gui.controller to javafx.fxml;
+    opens ProjectMovieCollection to javafx.graphics;
     exports ProjectMovieCollection;
+    exports ProjectMovieCollection.gui.controller;
 }
