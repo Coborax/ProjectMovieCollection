@@ -1,5 +1,6 @@
 package ProjectMovieCollection;
 
+import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +21,9 @@ public class App extends Application {
         scene = new Scene(loadFXML("view/chooseDirectory"));
         stage.setScene(scene);
         stage.show();
+
+        MovieDBProvider provider = new MovieDBProvider();
+        provider.getMovieImage(508442);
     }
 
     public static void setRoot(String fxml, int width, int height) throws IOException {
