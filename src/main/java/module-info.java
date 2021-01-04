@@ -5,7 +5,10 @@ module jkm {
     requires java.sql;
     requires java.naming;
     requires themoviedbapi;
-    requires org.slf4j;
+
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
+    requires  com.fasterxml.jackson.annotation;
 
     opens ProjectMovieCollection.gui.controller to javafx.fxml;
     opens ProjectMovieCollection to javafx.graphics;

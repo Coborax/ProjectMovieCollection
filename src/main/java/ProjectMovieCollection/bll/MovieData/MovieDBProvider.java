@@ -12,15 +12,34 @@ public class MovieDBProvider implements IMovieInfoProvider {
 
     private MovieDBConfig config;
 
+    private final String imgBaseUrl = "http://image.tmdb.org/t/p/w500";
+
     public MovieDBProvider() throws IOException {
         config = new MovieDBConfig("moviedb.properties");
     }
 
     @Override
-    public File getMovieImage(int id) {
+    public String getMovieImage(int id) {
         TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
         MovieDb movie = movies.getMovie(id, "en");
 
-        return null;
+        return imgBaseUrl + movie.getPosterPath();
     }
+
+    @Override
+    public String getMovieTitle(int id) {
+        TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
+        MovieDb movie = movies.getMovie(id, "en");
+
+        return movie.getTitle();
+    }
+
+    @Override
+    public String getMovieDesc(int id) {
+        TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
+        MovieDb movie = movies.getMovie(id, "en");
+
+        return movie.getOverview();
+    }
+
 }

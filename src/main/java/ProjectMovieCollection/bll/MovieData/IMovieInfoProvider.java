@@ -6,6 +6,8 @@ import java.io.File;
 
 public interface IMovieInfoProvider {
 
-    File getMovieImage(int id);
+    String getMovieImage(int id);
+    String getMovieTitle(int id);
+    String getMovieDesc(int id);
 
 }
