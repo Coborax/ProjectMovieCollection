@@ -10,10 +10,10 @@ import info.movito.themoviedbapi.model.MovieDb;
 
 public class MovieDBProvider implements IMovieInfoProvider {
 
-    private MovieDBConfig config = new MovieDBConfig("moviedb.properties");
+    private MovieDBConfig config;
 
     public MovieDBProvider() throws IOException {
-
+        config = new MovieDBConfig("moviedb.properties");
     }
 
     @Override
