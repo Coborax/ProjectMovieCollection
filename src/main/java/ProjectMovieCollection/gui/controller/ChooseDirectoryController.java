@@ -19,16 +19,15 @@ import javafx.stage.Stage;
 public class ChooseDirectoryController {
 
     @FXML
-    private AnchorPane anchorid;
+    private AnchorPane anchorPane;
     @FXML
     private TextField directoryTextField;
 
-    final DirectoryChooser dirchoose = new DirectoryChooser();
-    final Directory dir = new Directory();
-    Stage stage = (Stage) anchorid.getScene().getWindow();
+    private final DirectoryChooser dirchoose = new DirectoryChooser();
+    private final Directory dir = new Directory();
 
     public void browseButtonAction(ActionEvent actionEvent) {
-        File file = dirchoose.showDialog(stage);
+        File file = dirchoose.showDialog((Stage) anchorPane.getScene().getWindow());
 
         dir.setFilepath(file);
 
