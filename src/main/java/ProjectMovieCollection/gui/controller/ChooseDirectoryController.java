@@ -5,9 +5,9 @@
 package ProjectMovieCollection.gui.controller;
 
 import java.io.File;
-
+import java.io.IOException;
 import ProjectMovieCollection.App;
-import ProjectMovieCollection.bll.Directory;
+import ProjectMovieCollection.utils.settings.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -20,31 +20,25 @@ public class ChooseDirectoryController {
     @FXML private VBox vBox;
     @FXML private TextField directoryTextField;
 
-    private final DirectoryChooser dirchoose = new DirectoryChooser();
-    private final Directory dir = new Directory();
+    private final DirectoryChooser dir = new DirectoryChooser();
 
     public void browseButtonAction(ActionEvent actionEvent) {
-        // Opens the explorer and sets the selected directory as a file datatype.
-        File file = dirchoose.showDialog(vBox.getScene().getWindow());
+        // Opens the explorer and sets the selected directory as a File datatype.
+        File file = dir.showDialog(vBox.getScene().getWindow());
+        // Update the DIRECTORY static variable.
+        Settings.DIRECTORY = file.toString();
 
-        // Update the selected directory path.
-        dir.setFilepath(file);
-
-        try {
-            if (dir.getFilepath() != null) {
-                // Sets the text field to the selected directory.
-                directoryTextField.setText(dir.getFilepath());
-            }
-        } catch (Exception ignored) {}
+        if (Settings.DIRECTORY != null) {
+            // Sets the text field to the selected directory.
+            directoryTextField.setText(Settings.DIRECTORY);
+        }
     }
 
-    public void confirmButtonAction(ActionEvent actionEvent) {
-        try {
-            if (dir.getFilepath() != null) {
-                // Switch to the primary scene.
-                App.setRoot("view/primary", 1280, 720);
-            }
-        } catch (Exception e) {
+    public void confirmButtonAction(ActionEvent actionEvent) throws IOException {
+        if (Settings.DIRECTORY != null) {
+            // Switch to the primary scene.
+            App.setRoot("view/primary", 1280, 720);
+        } else {
             // Open error prompt.
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
