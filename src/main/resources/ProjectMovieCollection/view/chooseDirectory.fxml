@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox prefHeight="175.0" prefWidth="502.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.ChooseDirectoryController">
+<VBox fx:id="vBox" prefHeight="175.0" prefWidth="502.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.ChooseDirectoryController">
    <children>
       <HBox alignment="CENTER">
          <VBox.margin>

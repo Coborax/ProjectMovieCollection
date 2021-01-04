@@ -13,13 +13,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 public class ChooseDirectoryController {
 
     @FXML
-    private AnchorPane anchorPane;
+    private VBox vBox;
     @FXML
     private TextField directoryTextField;
 
@@ -27,7 +28,7 @@ public class ChooseDirectoryController {
     private final Directory dir = new Directory();
 
     public void browseButtonAction(ActionEvent actionEvent) {
-        File file = dirchoose.showDialog((Stage) anchorPane.getScene().getWindow());
+        File file = dirchoose.showDialog((Stage) vBox.getScene().getWindow());
 
         dir.setFilepath(file);
 
