@@ -1,6 +1,8 @@
-package ProjectMovieCollection;
+package ProjectMovieCollection.gui.controller;
 
 import java.io.IOException;
+
+import ProjectMovieCollection.App;
 import javafx.fxml.FXML;
 
 public class SecondaryController {
