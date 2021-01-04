@@ -4,6 +4,7 @@ import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
 import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.utils.settings.Settings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
@@ -30,8 +31,7 @@ public class MovieManager {
     }
 
     public void loadMoviesFromDisk() {
-        String testString = "D:/Private/TestMovies";
-        File dir = new File(testString);
+        File dir = new File(Settings.DIRECTORY);
         for (File file : dir.listFiles()) {
             System.out.println(FilenameUtils.getExtension(file.getPath()));
             if (FilenameUtils.getExtension(file.getPath()).equals("mp4")) {
