@@ -22,6 +22,8 @@ public class PrimaryController implements Initializable {
     private Label movieTitle;
     @FXML
     private TextArea movieDesc;
+    @FXML
+    private Label categories;
 
     @FXML
     private void switchToSecondary() throws IOException {
@@ -31,13 +33,20 @@ public class PrimaryController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // The code beneath is only test code, it is to be removed
-        int movieID = 244786;
+        int movieID = 508442;
 
         try {
             IMovieInfoProvider provider = new MovieDBProvider();
             moviePoster.setImage(new Image(provider.getMovieImage(movieID)));
             movieTitle.setText(provider.getMovieTitle(movieID));
             movieDesc.setText(provider.getMovieDesc(movieID));
+            String cats = "Categories: ";
+
+            for (String cat : provider.getCategories(movieID)) {
+                cats += cat + ", ";
+            }
+            categories.setText(cats);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
