@@ -5,6 +5,7 @@ module jkm {
     requires java.sql;
     requires java.naming;
     requires themoviedbapi;
+    requires org.slf4j;
 
     opens ProjectMovieCollection.gui.controller to javafx.fxml;
     opens ProjectMovieCollection to javafx.graphics;
