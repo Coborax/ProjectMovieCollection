@@ -4,5 +4,8 @@
  * @author kjell
  */
 
-package ProjectMovieCollection.gui.model;public class MovieModel {
+package ProjectMovieCollection.gui.model;
+
+public class MovieModel {
+
 }
