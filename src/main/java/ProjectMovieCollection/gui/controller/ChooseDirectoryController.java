@@ -39,7 +39,7 @@ public class ChooseDirectoryController {
 
     public void confirmButtonAction(ActionEvent actionEvent) throws IOException {
         if (dir.getFilepath() != null) {
-            App.setRoot("view/primary");
+            App.setRoot("view/primary",1280,720);
         } else {
             // TODO: Implement UI prompt
             System.out.println("Choose a path");
