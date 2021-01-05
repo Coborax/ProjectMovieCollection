@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -63,6 +64,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
+                  <JFXTextArea fx:id="movieDesc" prefHeight="205.0" prefWidth="428.0" />
                </children>
             </VBox>
          </children>

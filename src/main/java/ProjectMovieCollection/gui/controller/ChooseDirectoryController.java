@@ -51,10 +51,12 @@ public class ChooseDirectoryController {
     public void confirmButtonAction(ActionEvent actionEvent) {
         try {
             dm.confirm();
-            // Switch to the primary scene.
             App.setRoot("view/primary", 1280, 720);
-        } catch (IOException | MovieDirectoryException e) {
+        } catch (MovieDirectoryException e) {
             am.displayAlertError("No Directory Selected","Please select a directory before continuing.");
+        } catch (IOException e) {
+            am.displayAlertError("Could not load next window", "Could not load next window");
+            e.printStackTrace();
         }
 
     }

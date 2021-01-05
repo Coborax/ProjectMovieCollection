@@ -8,6 +8,7 @@ import ProjectMovieCollection.App;
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.utils.exception.MovieDirectoryException;
+import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -26,12 +27,9 @@ public class PrimaryController implements Initializable {
     @FXML
     private Label movieTitle;
     @FXML
-    private TextArea movieDesc;
+    private JFXTextArea movieDesc;
     @FXML
     private Label categories;
-
-    @FXML
-    private TextField movieDBID;
 
     @FXML
     private ListView<Movie> movieList;
