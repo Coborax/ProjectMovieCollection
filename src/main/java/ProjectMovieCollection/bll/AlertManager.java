@@ -2,17 +2,16 @@
  * @author kjell
  */
 
-package ProjectMovieCollection.utils.exception;
+package ProjectMovieCollection.bll;
 
 import javafx.scene.control.Alert;
 
-public class UIException extends Exception {
+public class AlertManager {
 
-    public UIException(String message) {
-        super(message);
+    public void displayAlertError(String header, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error Dialog");
-        alert.setHeaderText("An Error Occurred");
+        alert.setHeaderText(header);
         alert.setContentText(message);
         alert.showAndWait();
     }

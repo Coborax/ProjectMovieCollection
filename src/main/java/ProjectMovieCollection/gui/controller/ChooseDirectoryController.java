@@ -5,8 +5,12 @@
 package ProjectMovieCollection.gui.controller;
 
 import java.io.File;
+import java.io.IOException;
+
 import ProjectMovieCollection.App;
-import ProjectMovieCollection.utils.exception.UIException;
+import ProjectMovieCollection.bll.AlertManager;
+import ProjectMovieCollection.gui.model.DirectoryModel;
+import ProjectMovieCollection.utils.exception.MovieDirectoryException;
 import ProjectMovieCollection.utils.settings.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +22,8 @@ public class ChooseDirectoryController {
 
     @FXML private VBox vBox;
     @FXML private TextField directoryTextField;
+    DirectoryModel dm = new DirectoryModel();
+    AlertManager am = new AlertManager();
 
     private final DirectoryChooser dir = new DirectoryChooser();
 
@@ -37,14 +43,18 @@ public class ChooseDirectoryController {
         }
     }
 
+
+    /**
+     * Throws exception if confirmation failed, then displays an alert to inform the user of the error.
+     * @param actionEvent
+     */
     public void confirmButtonAction(ActionEvent actionEvent) {
         try {
-            if (Settings.DIRECTORY != null) {
-                // Switch to the primary scene.
-                App.setRoot("view/primary", 1280, 720);
-            } else {throw new UIException("No Directory Selected");}
-        } catch (Exception e) {
-            System.out.println("No directory selected");
+            dm.confirm();
+            // Switch to the primary scene.
+            App.setRoot("view/primary", 1280, 720);
+        } catch (IOException | MovieDirectoryException e) {
+            am.displayAlertError("No Directory Selected","Please select a directory before continuing.");
         }
 
     }

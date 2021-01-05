@@ -1,16 +1,13 @@
 package ProjectMovieCollection.gui.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import ProjectMovieCollection.App;
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
-import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
 import ProjectMovieCollection.bll.MovieManager;
-import ProjectMovieCollection.utils.exception.UIException;
+import ProjectMovieCollection.utils.exception.MovieDirectoryException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -46,10 +43,6 @@ public class PrimaryController implements Initializable {
     //TEMP Just using movie manager here
     private MovieManager manager = new MovieManager();
 
-    @FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary",1280,720);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -90,18 +83,4 @@ public class PrimaryController implements Initializable {
         }
     }
 
-    public void loadDataFromMovieDB(ActionEvent actionEvent) {
-        try {
-            // If given ID is a number and has length of 6.
-            if (movieDBID.getText().matches("[0-9]+") && movieDBID.getText().length() == 6) {
-                manager.loadMovieInfo(movieList.getSelectionModel().getSelectedItem(), Integer.parseInt(movieDBID.getText()));
-                updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
-                System.out.println("yoo");
-            } else {
-                throw new UIException("Not a valid TMDB ID");
-            }
-        } catch (Exception e) {
-            System.out.println("Invalid ID");
-        }
-    }
 }
