@@ -41,8 +41,10 @@ public class PrimaryController implements Initializable {
     @FXML
     private ListView categoryList;
 
+    private Image posterPlaceholder;
+
     //TEMP Just using movie manager here
-    public MovieManager manager = new MovieManager();
+    private MovieManager manager = new MovieManager();
 
     @FXML
     private void switchToSecondary() throws IOException {
@@ -51,10 +53,11 @@ public class PrimaryController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        posterPlaceholder = new Image("https://via.placeholder.com/300x600?text=Movie%20Poster");
+        moviePoster.setImage(posterPlaceholder);
+
         manager.loadMoviesFromDisk();
-
         movieList.setItems(manager.getObservableMovieList());
-
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
@@ -80,7 +83,11 @@ public class PrimaryController implements Initializable {
     private void updateUIToMovie(Movie m) {
         movieTitle.setText(m.getTitle());
         movieDesc.setText(m.getDesc());
-        moviePoster.setImage(new Image(m.getImgPath()));
+        try {
+            moviePoster.setImage(new Image(m.getImgPath()));
+        } catch (Exception e) {
+            moviePoster.setImage(posterPlaceholder);
+        }
     }
 
     public void loadDataFromMovieDB(ActionEvent actionEvent) {
