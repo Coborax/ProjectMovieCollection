@@ -6,7 +6,6 @@ package ProjectMovieCollection.gui.controller;
 
 import java.io.File;
 import java.io.IOException;
-
 import ProjectMovieCollection.App;
 import ProjectMovieCollection.bll.AlertManager;
 import ProjectMovieCollection.gui.model.DirectoryModel;
@@ -22,10 +21,12 @@ public class ChooseDirectoryController {
 
     @FXML private VBox vBox;
     @FXML private TextField directoryTextField;
+
     DirectoryModel dm = new DirectoryModel();
     AlertManager am = new AlertManager();
 
     private final DirectoryChooser dir = new DirectoryChooser();
+
 
     public void browseButtonAction(ActionEvent actionEvent) {
         try {
@@ -58,6 +59,5 @@ public class ChooseDirectoryController {
             am.displayAlertError("Could not load next window", "Could not load next window");
             e.printStackTrace();
         }
-
     }
 }
