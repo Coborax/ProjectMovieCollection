@@ -10,6 +10,7 @@ import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
 import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
 import ProjectMovieCollection.bll.MovieManager;
+import ProjectMovieCollection.utils.exception.UIException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -83,7 +84,17 @@ public class PrimaryController implements Initializable {
     }
 
     public void loadDataFromMovieDB(ActionEvent actionEvent) {
-        manager.loadMovieInfo(movieList.getSelectionModel().getSelectedItem(), Integer.parseInt(movieDBID.getText()));
-        updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
+        try {
+            // If given ID is a number and has length of 6.
+            if (movieDBID.getText().matches("[0-9]+") && movieDBID.getText().length() == 6) {
+                manager.loadMovieInfo(movieList.getSelectionModel().getSelectedItem(), Integer.parseInt(movieDBID.getText()));
+                updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
+                System.out.println("yoo");
+            } else {
+                throw new UIException("Not a valid TMDB ID");
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid ID");
+        }
     }
 }
