@@ -7,7 +7,9 @@ import java.util.List;
 
 import ProjectMovieCollection.utils.config.MovieDBConfig;
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbFind;
 import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.TmdbSearch;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 
@@ -57,6 +59,13 @@ public class MovieDBProvider implements IMovieInfoProvider {
         }
 
         return categories;
+    }
+
+    public int guessMovie(String title) {
+        TmdbSearch search = new TmdbApi(config.getAPIKey()).getSearch();
+        MovieDb movie = search.searchMovie(title, 0, null, false, 0).getResults().get(0);
+
+        return movie.getId();
     }
 
 }

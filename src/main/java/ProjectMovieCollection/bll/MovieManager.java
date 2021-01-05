@@ -35,7 +35,11 @@ public class MovieManager {
         for (File file : dir.listFiles()) {
             System.out.println(FilenameUtils.getExtension(file.getPath()));
             if (FilenameUtils.getExtension(file.getPath()).equals("mp4")) {
-                movies.add(new Movie(file.getName(), file.getPath()));
+                int id = infoProvider.guessMovie(FilenameUtils.getName(file.getPath()).replace(".mp4", ""));
+                Movie m = new Movie(infoProvider.getMovieTitle(id), file.getPath());
+                m.setDesc(infoProvider.getMovieDesc(id));
+                m.setImgPath(infoProvider.getMovieImage(id));
+                movies.add(m);
             }
         }
     }

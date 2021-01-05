@@ -35,4 +35,11 @@ public interface IMovieInfoProvider {
      */
     List<String> getCategories(int id);
 
+    /**
+     * Searches for a movie based on the title
+     * @param title The title of the movie
+     * @return an ID of the movie, for the provider
+     */
+    int guessMovie(String title);
+
 }
