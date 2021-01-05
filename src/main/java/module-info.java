@@ -12,6 +12,8 @@ module jkm {
 
     requires org.apache.commons.io;
 
+    requires com.jfoenix;
+
     opens ProjectMovieCollection.gui.controller to javafx.fxml;
     opens ProjectMovieCollection to javafx.graphics;
     exports ProjectMovieCollection;
