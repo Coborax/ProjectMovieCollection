@@ -2,7 +2,7 @@ package ProjectMovieCollection.bll;
 
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
+import ProjectMovieCollection.bll.MovieData.interfaces.IMovieInfoProvider;
 import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
@@ -39,7 +39,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
             System.out.println(FilenameUtils.getExtension(file.getPath()));
             if (FilenameUtils.getExtension(file.getPath()).equals("mp4")) {
                 int id = infoProvider.guessMovie(FilenameUtils.getName(file.getPath()).replace(".mp4", ""));
-                Movie m = new Movie(infoProvider.getMovieTitle(id), file.getPath());
+                Movie m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
                 m.setDesc(infoProvider.getMovieDesc(id));
                 m.setImgPath(infoProvider.getMovieImage(id));
                 movies.add(m);
