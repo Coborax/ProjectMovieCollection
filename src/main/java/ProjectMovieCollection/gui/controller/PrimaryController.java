@@ -79,6 +79,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     private void updateUIToMovie(Movie m) {
         movieTitle.setText(m.getTitle());
         movieDesc.setText(m.getDesc());
+        categories.setText(movieBrowserModel.getCategoryString(m));
         try {
             moviePoster.setImage(new Image(m.getImgPath()));
         } catch (Exception e) {

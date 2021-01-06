@@ -6,6 +6,7 @@
 
 package ProjectMovieCollection.gui.model;
 
+import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.bll.CategoryManager;
 import ProjectMovieCollection.bll.MovieManager;
@@ -35,15 +36,19 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         t.start();
     }
 
-    private void loadMovies() {
-
-    }
-
     @Override
     public void updateLoadProgress(float progress) {
         for (IMovieModelListener listener : getListeners()) {
             listener.updateLoadProgress(progress);
         }
+    }
+
+    public String getCategoryString(Movie m) {
+        String categoryString = "";
+        for (Category c : m.getCategories()) {
+            categoryString += c.getName() + ", ";
+        }
+        return categoryString;
     }
 
     public ObservableList<Movie> getObservableMovieList() {

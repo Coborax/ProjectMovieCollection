@@ -100,6 +100,10 @@ public class Movie {
         this.providerID = providerID;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
     @Override
     public String toString() {
         return title;
