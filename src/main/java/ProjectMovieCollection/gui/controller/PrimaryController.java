@@ -43,7 +43,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @FXML
     private JFXSpinner spinner;
 
-    private Image posterPlaceholder = new Image("https://via.placeholder.com/300x600?text=Movie%20Poster");;
+    private Image posterPlaceholder;
     private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
 
 
@@ -58,7 +58,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         movieBrowserModel.addListener(this);
         movieBrowserModel.loadAllData();
 
-        moviePoster.setImage(posterPlaceholder);
+        posterPlaceholder = moviePoster.getImage();
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {

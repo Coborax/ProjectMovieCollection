@@ -26,6 +26,10 @@ public class MovieDBProvider implements IMovieInfoProvider {
         TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
         MovieDb movie = movies.getMovie(id, "en");
 
+        if (movie.getPosterPath() == null) {
+            return null;
+        }
+
         return imgBaseUrl + movie.getPosterPath();
     }
 
