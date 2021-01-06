@@ -17,8 +17,6 @@ import java.util.List;
 public class MovieManager extends EventHandler<IMovieManagerListener> {
 
     private List<Movie> movies = new ArrayList<>();
-    private List<Category> categories = new ArrayList<>();
-
     private IMovieInfoProvider infoProvider;
 
     public MovieManager() {
@@ -58,8 +56,6 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         m.setImgPath(infoProvider.getMovieImage(id));
     }
 
-    public List<Movie> getAllMovies() {
-        return movies;
-    }
+    public List<Movie> getAllMovies() { return movies; }
 
 }

@@ -77,6 +77,10 @@ public class Movie {
         this.imgPath = imgPath;
     }
 
+    public void addCategory(Category category) {
+        categories.add(category);
+    }
+
     @Override
     public String toString() {
         return title;

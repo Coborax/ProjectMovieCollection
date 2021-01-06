@@ -14,15 +14,27 @@ import ProjectMovieCollection.utils.events.IMovieModelListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class MovieModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
+public class MovieBrowserModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
 
     private MovieManager manager = new MovieManager();
 
-    public MovieModel() {
+    public MovieBrowserModel() {
         manager.addListener(this);
     }
 
-    public void loadMovies() {
+    public void loadAllData() {
+        loadMovies();
+        loadCategoriesFromMovies();
+    }
+
+    private void loadCategoriesFromMovies() {
+        Thread t = new Thread(() -> {
+
+        });
+        t.start();
+    }
+
+    private void loadMovies() {
         Thread t = new Thread(() -> {
             manager.loadMoviesFromDisk();
             for (IMovieModelListener listener : getListeners()) {
