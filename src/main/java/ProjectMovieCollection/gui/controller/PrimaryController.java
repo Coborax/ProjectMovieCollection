@@ -1,11 +1,12 @@
 package ProjectMovieCollection.gui.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import ProjectMovieCollection.App;
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.gui.model.MovieBrowserModel;
+import ProjectMovieCollection.gui.model.MovieModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
@@ -43,8 +44,8 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @FXML
     private JFXSpinner spinner;
 
-    private Image posterPlaceholder;
-    private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
+    private Image posterPlaceholder = new Image("https://via.placeholder.com/300x600?text=Movie%20Poster");;
+    private MovieModel movieModel = new MovieModel();
 
 
     @Override
@@ -55,10 +56,10 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         mainContent.managedProperty().bind(mainContent.visibleProperty());
         loader.managedProperty().bind(loader.visibleProperty());
 
-        movieBrowserModel.addListener(this);
-        movieBrowserModel.loadAllData();
+        movieModel.addListener(this);
+        movieModel.loadMovies();
 
-        posterPlaceholder = moviePoster.getImage();
+        moviePoster.setImage(posterPlaceholder);
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
@@ -79,7 +80,6 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     private void updateUIToMovie(Movie m) {
         movieTitle.setText(m.getTitle());
         movieDesc.setText(m.getDesc());
-        categories.setText(movieBrowserModel.getCategoryString(m));
         try {
             moviePoster.setImage(new Image(m.getImgPath()));
         } catch (Exception e) {
@@ -89,8 +89,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
 
     @Override
     public void dataFetched() {
-        movieList.setItems(movieBrowserModel.getObservableMovieList());
-        categoryList.setItems(movieBrowserModel.getObservableCategoryList());
+        movieList.setItems(movieModel.getObservableMovieList());
         loader.setVisible(false);
         mainContent.setVisible(true);
     }
