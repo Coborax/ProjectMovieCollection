@@ -15,13 +15,13 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("view/chooseDirectory"));
         stage.setScene(scene);
-        stage.show();
         stage.setTitle("Project Movie Collection");
+        stage.centerOnScreen();
+        stage.show();
 
         MovieDBProvider provider = new MovieDBProvider();
         provider.getMovieImage(508442);
@@ -31,6 +31,7 @@ public class App extends Application {
         scene.setRoot(loadFXML(fxml));
         scene.getWindow().setWidth(width);
         scene.getWindow().setHeight(height);
+        scene.getWindow().centerOnScreen();
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
