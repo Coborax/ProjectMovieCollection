@@ -1,0 +1,10 @@
+.jfx-button {
+    -fx-background-color: #03a9f4;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.mainContent {
+    -fx-background-color: #f5f5f6;
+}
