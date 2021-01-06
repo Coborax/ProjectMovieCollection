@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import ProjectMovieCollection.App;
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieManager;
-import ProjectMovieCollection.utils.exception.MovieDirectoryException;
+import ProjectMovieCollection.gui.model.MovieModel;
+import ProjectMovieCollection.utils.events.IMovieModelListener;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,8 +18,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 
-public class PrimaryController implements Initializable {
+public class PrimaryController implements Initializable, IMovieModelListener {
 
     @FXML
     private ImageView moviePoster;
@@ -35,20 +35,30 @@ public class PrimaryController implements Initializable {
     private ListView<Movie> movieList;
     @FXML
     private ListView categoryList;
+    @FXML
+    private HBox mainContent;
+    @FXML
+    private HBox loader;
+    @FXML
+    private JFXSpinner spinner;
 
     private Image posterPlaceholder;
 
-    //TEMP Just using movie manager here
-    private MovieManager manager = new MovieManager();
+    private MovieModel movieModel = new MovieModel();
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mainContent.setVisible(false);
+        loader.setVisible(true);
+
+        movieModel.addListener(this);
+
         posterPlaceholder = new Image("https://via.placeholder.com/300x600?text=Movie%20Poster");
         moviePoster.setImage(posterPlaceholder);
 
-        manager.loadMoviesFromDisk();
-        movieList.setItems(manager.getObservableMovieList());
+        movieModel.loadMovies();
+
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
@@ -81,4 +91,15 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    @Override
+    public void dataFetched() {
+        movieList.setItems(movieModel.getObservableMovieList());
+        loader.setVisible(false);
+        mainContent.setVisible(true);
+    }
+
+    @Override
+    public void updateLoadProgress(float progress) {
+        spinner.setProgress(progress);
+    }
 }

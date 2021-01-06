@@ -4,9 +4,9 @@ import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
 import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.utils.events.EventHandler;
+import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.settings.Settings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieManager {
+public class MovieManager extends EventHandler<IMovieManagerListener> {
 
     private List<Movie> movies = new ArrayList<>();
     private List<Category> categories = new ArrayList<>();
@@ -32,6 +32,9 @@ public class MovieManager {
 
     public void loadMoviesFromDisk() {
         File dir = new File(Settings.DIRECTORY);
+        int totalMovies = dir.listFiles().length;
+        int loaded = 0;
+
         for (File file : dir.listFiles()) {
             System.out.println(FilenameUtils.getExtension(file.getPath()));
             if (FilenameUtils.getExtension(file.getPath()).equals("mp4")) {
@@ -40,6 +43,11 @@ public class MovieManager {
                 m.setDesc(infoProvider.getMovieDesc(id));
                 m.setImgPath(infoProvider.getMovieImage(id));
                 movies.add(m);
+                loaded++;
+                for (IMovieManagerListener listener : getListeners()) {
+                    System.out.println(loaded / totalMovies);
+                    listener.updateLoadProgress((float) loaded / (float) totalMovies);
+                }
             }
         }
     }
@@ -50,8 +58,8 @@ public class MovieManager {
         m.setImgPath(infoProvider.getMovieImage(id));
     }
 
-    public ObservableList getObservableMovieList() {
-        return FXCollections.observableArrayList(movies);
+    public List<Movie> getAllMovies() {
+        return movies;
     }
 
 }
