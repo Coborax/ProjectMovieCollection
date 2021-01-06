@@ -16,10 +16,14 @@ import ProjectMovieCollection.utils.events.IMovieModelListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.List;
+
 public class MovieBrowserModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
 
     private MovieManager movieManager = new MovieManager();
     private CategoryManager categoryManager = new CategoryManager();
+
+    private ObservableList<Movie> movieList;
 
     public MovieBrowserModel() {
         movieManager.addListener(this);
@@ -52,11 +56,23 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
     }
 
     public ObservableList<Movie> getObservableMovieList() {
-        return FXCollections.observableList(movieManager.getAllMovies());
+        return movieList;
     }
 
-    public ObservableList getObservableCategoryList() {
+    public ObservableList<Category> getObservableCategoryList() {
         return FXCollections.observableList(categoryManager.getAllCategories());
+    }
+
+    public void filterMovies(Category category) {
+        List<Movie> movies = movieManager.getAllMovies();
+        movieList.clear();
+
+        for (Movie m : movies) {
+            if (m.getCategories().contains(category) && !movieList.contains(m)) {
+                movieList.add(m);
+            }
+        }
+
     }
 
 }

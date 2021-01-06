@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import ProjectMovieCollection.App;
+import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.gui.model.MovieBrowserModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
@@ -35,7 +36,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @FXML
     private ListView<Movie> movieList;
     @FXML
-    private ListView categoryList;
+    private ListView<Category> categoryList;
     @FXML
     private HBox mainContent;
     @FXML
@@ -72,6 +73,13 @@ public class PrimaryController implements Initializable, IMovieModelListener {
                 if (event.getClickCount() == 2) {
                     App.getHost().showDocument(movieList.getSelectionModel().getSelectedItem().getFilepath());
                 }
+            }
+        });
+
+        categoryList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Category>() {
+            @Override
+            public void changed(ObservableValue<? extends Category> observableValue, Category category, Category t1) {
+                movieBrowserModel.filterMovies(t1);
             }
         });
     }
