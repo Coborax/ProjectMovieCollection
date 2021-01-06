@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.IOException;
 
@@ -21,8 +20,9 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("view/chooseDirectory"));
         stage.setScene(scene);
-        stage.show();
         stage.setTitle("Project Movie Collection");
+        stage.show();
+        stage.centerOnScreen();
 
         MovieDBProvider provider = new MovieDBProvider();
         provider.getMovieImage(508442);
