@@ -27,6 +27,7 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
 
     public MovieBrowserModel() {
         movieManager.addListener(this);
+        movieList = FXCollections.emptyObservableList();
     }
 
     public void loadAllData() {
