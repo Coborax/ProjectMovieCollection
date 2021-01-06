@@ -55,7 +55,7 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
                 categoryString += c.getName() + ", ";
             }
         }
-        return categoryString;
+        return categoryString.substring(0, categoryString.lastIndexOf(","));
     }
 
     public ObservableList<Movie> getObservableMovieList() {
@@ -73,7 +73,9 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         for (Movie m : movies) {
             if (m.getCategories().contains(category) && !movieList.contains(m)) {
                 movieList.add(m);
+
             }
+
         }
 
     }
