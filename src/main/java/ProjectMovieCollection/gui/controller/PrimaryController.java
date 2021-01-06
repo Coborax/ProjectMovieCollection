@@ -89,6 +89,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @Override
     public void dataFetched() {
         movieList.setItems(movieBrowserModel.getObservableMovieList());
+        categoryList.setItems(movieBrowserModel.getObservableCategoryList());
         loader.setVisible(false);
         mainContent.setVisible(true);
     }

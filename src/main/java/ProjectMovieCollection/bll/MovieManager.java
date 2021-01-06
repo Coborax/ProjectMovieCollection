@@ -1,8 +1,7 @@
 package ProjectMovieCollection.bll;
 
-import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieData.interfaces.IMovieInfoProvider;
+import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
 import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
@@ -40,6 +39,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
                 Movie m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
                 m.setDesc(infoProvider.getMovieDesc(id));
                 m.setImgPath(infoProvider.getMovieImage(id));
+                m.setProviderID(id);
                 movies.add(m);
                 loaded++;
                 for (IMovieManagerListener listener : getListeners()) {

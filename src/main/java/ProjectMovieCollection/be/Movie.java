@@ -5,12 +5,14 @@
 package ProjectMovieCollection.be;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Movie {
 
     private int id;
+    private int providerID;
     private String title;
     private String desc;
     private int rating;
@@ -18,7 +20,7 @@ public class Movie {
     private String imgPath;
     private Date lastView;
 
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     public Movie(int id ,String title, String filepath) {
         this.id = id;
@@ -27,6 +29,7 @@ public class Movie {
 
         lastView = Date.from(Instant.now());
         rating = -1;
+        providerID = -1;
     }
 
     public int getId() {
@@ -87,6 +90,14 @@ public class Movie {
 
     public void addCategory(Category category) {
         categories.add(category);
+    }
+
+    public int getProviderID() {
+        return providerID;
+    }
+
+    public void setProviderID(int providerID) {
+        this.providerID = providerID;
     }
 
     @Override

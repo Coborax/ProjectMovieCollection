@@ -7,6 +7,7 @@
 package ProjectMovieCollection.gui.model;
 
 import ProjectMovieCollection.be.Movie;
+import ProjectMovieCollection.bll.CategoryManager;
 import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
@@ -16,27 +17,17 @@ import javafx.collections.ObservableList;
 
 public class MovieBrowserModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
 
-    private MovieManager manager = new MovieManager();
+    private MovieManager movieManager = new MovieManager();
+    private CategoryManager categoryManager = new CategoryManager();
 
     public MovieBrowserModel() {
-        manager.addListener(this);
+        movieManager.addListener(this);
     }
 
     public void loadAllData() {
-        loadMovies();
-        loadCategoriesFromMovies();
-    }
-
-    private void loadCategoriesFromMovies() {
         Thread t = new Thread(() -> {
-
-        });
-        t.start();
-    }
-
-    private void loadMovies() {
-        Thread t = new Thread(() -> {
-            manager.loadMoviesFromDisk();
+            movieManager.loadMoviesFromDisk();
+            categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
             for (IMovieModelListener listener : getListeners()) {
                 listener.dataFetched();
             }
@@ -44,8 +35,8 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         t.start();
     }
 
-    public ObservableList<Movie> getObservableMovieList() {
-        return FXCollections.observableList(manager.getAllMovies());
+    private void loadMovies() {
+
     }
 
     @Override
@@ -54,4 +45,13 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
             listener.updateLoadProgress(progress);
         }
     }
+
+    public ObservableList<Movie> getObservableMovieList() {
+        return FXCollections.observableList(movieManager.getAllMovies());
+    }
+
+    public ObservableList getObservableCategoryList() {
+        return FXCollections.observableList(categoryManager.getAllCategories());
+    }
+
 }

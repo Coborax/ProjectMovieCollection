@@ -23,15 +23,26 @@ public class CategoryManager {
         }
     }
 
-    public void createCategory(String name) {
-        //TODO: Get from database
-        categories.add(new Category(-1, -1, name));
+    public void loadCategoriesFromMovieList(List<Movie> movies) {
+        for (Movie m : movies) {
+            loadCategoriesFromMovie(m);
+        }
     }
 
-    public void loadCategoriesFromMovie(Movie m, int id) {
-        for (String category : infoProvider.getCategories(id)) {
+    private void loadCategoriesFromMovie(Movie m) {
+
+        for (String category : infoProvider.getCategories(m.getProviderID())) {
+            Category categoryToAdd = null;
             for (Category c : categories) {
+                if (c.getName().equals(category)) {
+                    categoryToAdd = c;
+                }
             }
+            if (categoryToAdd == null) {
+                categoryToAdd = new Category(-1, category);
+                categories.add(categoryToAdd);
+            }
+            m.addCategory(categoryToAdd);
         }
     }
 
