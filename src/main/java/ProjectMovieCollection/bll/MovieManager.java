@@ -10,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +35,22 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
 
         for (File file : dir.listFiles()) {
             System.out.println(FilenameUtils.getExtension(file.getPath()));
-            if (FilenameUtils.getExtension(file.getPath()).equals("mp4")) {
-                int id = infoProvider.guessMovie(FilenameUtils.getName(file.getPath()).replace(".mp4", ""));
-                Movie m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
-                m.setDesc(infoProvider.getMovieDesc(id));
-                m.setImgPath(infoProvider.getMovieImage(id));
-                m.setProviderID(id);
-                movies.add(m);
+            if (FilenameUtils.getExtension(file.getPath()).equals("mp4") || FilenameUtils.getExtension(file.getPath()).equals("mkv")) {
+                String filename = FilenameUtils.getName(file.getPath());
+                String movieName = filename.substring(0, filename.lastIndexOf("."));
+                int id = infoProvider.guessMovie(movieName);
+
+                if (id != -1) {
+                    Movie m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
+                    m.setDesc(infoProvider.getMovieDesc(id));
+                    m.setImgPath(infoProvider.getMovieImage(id));
+                    m.setProviderID(id);
+                    movies.add(m);
+                } else {
+                    Movie m = new Movie(-1, FilenameUtils.getName(file.getPath()), file.getPath());
+                    movies.add(m);
+                }
+
                 loaded++;
                 for (IMovieManagerListener listener : getListeners()) {
                     System.out.println(loaded / totalMovies);

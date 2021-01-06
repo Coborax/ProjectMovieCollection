@@ -10,6 +10,7 @@ import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.TmdbSearch;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 public class MovieDBProvider implements IMovieInfoProvider {
 
@@ -65,9 +66,13 @@ public class MovieDBProvider implements IMovieInfoProvider {
 
     public int guessMovie(String title) {
         TmdbSearch search = new TmdbApi(config.getAPIKey()).getSearch();
-        MovieDb movie = search.searchMovie(title, 0, null, false, 0).getResults().get(0);
+        MovieResultsPage resultsPage = search.searchMovie(title, 0, null, true, 0);
 
-        return movie.getId();
+        if (resultsPage.getResults().size() != 0) {
+            MovieDb movie = resultsPage.getResults().get(0);
+            return movie.getId();
+        }
+        return -1;
     }
 
 }

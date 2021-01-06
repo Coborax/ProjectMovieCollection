@@ -30,11 +30,15 @@ public class CategoryManager {
     }
 
     private void loadCategoriesFromMovie(Movie m) {
-        List<String> categoryStrings = infoProvider.getCategories(m.getProviderID());
+        List<String> categoryStrings = new ArrayList<>();
         String allCategory = "All";
 
         categoryStrings.add(allCategory);
         categoryStrings.set(0, allCategory);
+
+        if (m.getProviderID() != -1) {
+            categoryStrings.addAll(infoProvider.getCategories(m.getProviderID()));
+        }
 
         for (String category : categoryStrings) {
             Category categoryToAdd = null;
