@@ -20,13 +20,21 @@ public class Movie {
 
     private List<Category> categories;
 
-    public Movie(String title, String filepath) {
+    public Movie(int id ,String title, String filepath) {
+        this.id = id;
         this.title = title;
         this.filepath = filepath;
 
         lastView = Date.from(Instant.now());
         rating = -1;
-        id = -1;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

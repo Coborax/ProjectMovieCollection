@@ -1,4 +1,4 @@
-package ProjectMovieCollection.bll.MovieData;
+package ProjectMovieCollection.bll.MovieData.interfaces;
 
 import ProjectMovieCollection.be.Movie;
 
