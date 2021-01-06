@@ -30,8 +30,13 @@ public class CategoryManager {
     }
 
     private void loadCategoriesFromMovie(Movie m) {
+        List<String> categoryStrings = infoProvider.getCategories(m.getProviderID());
+        String allCategory = "All";
 
-        for (String category : infoProvider.getCategories(m.getProviderID())) {
+        categoryStrings.add(allCategory);
+        categoryStrings.set(0, allCategory);
+
+        for (String category : categoryStrings) {
             Category categoryToAdd = null;
             for (Category c : categories) {
                 if (c.getName().equals(category)) {

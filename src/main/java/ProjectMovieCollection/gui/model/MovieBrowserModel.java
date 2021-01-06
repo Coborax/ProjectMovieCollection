@@ -51,7 +51,9 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
     public String getCategoryString(Movie m) {
         String categoryString = "";
         for (Category c : m.getCategories()) {
-            categoryString += c.getName() + ", ";
+            if (!c.getName().equals("All")) {
+                categoryString += c.getName() + ", ";
+            }
         }
         return categoryString;
     }
