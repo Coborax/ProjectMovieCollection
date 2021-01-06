@@ -63,7 +63,10 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
-                updateUIToMovie(newValue);
+                if (newValue != null) {
+                    updateUIToMovie(newValue);
+                }
+
             }
         });
 
