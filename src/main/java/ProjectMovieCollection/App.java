@@ -2,6 +2,7 @@ package ProjectMovieCollection;
 
 import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,6 +16,9 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+
+    private static HostServices hostServices;
+
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("view/chooseDirectory"));
@@ -22,6 +26,8 @@ public class App extends Application {
         stage.setTitle("Project Movie Collection");
         stage.centerOnScreen();
         stage.show();
+
+        hostServices = getHostServices();
 
         MovieDBProvider provider = new MovieDBProvider();
         provider.getMovieImage(508442);
@@ -37,6 +43,10 @@ public class App extends Application {
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
+    }
+
+    public static HostServices getHost() {
+        return hostServices;
     }
 
     public static void main(String[] args) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import ProjectMovieCollection.App;
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.gui.model.MovieModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
@@ -19,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class PrimaryController implements Initializable, IMovieModelListener {
 
@@ -38,12 +40,11 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @FXML
     private HBox mainContent;
     @FXML
-    private HBox loader;
+    private VBox loader;
     @FXML
     private JFXSpinner spinner;
 
-    private Image posterPlaceholder;
-
+    private Image posterPlaceholder = new Image("https://via.placeholder.com/300x600?text=Movie%20Poster");;
     private MovieModel movieModel = new MovieModel();
 
 
@@ -52,13 +53,13 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         mainContent.setVisible(false);
         loader.setVisible(true);
 
+        mainContent.managedProperty().bind(mainContent.visibleProperty());
+        loader.managedProperty().bind(loader.visibleProperty());
+
         movieModel.addListener(this);
-
-        posterPlaceholder = new Image("https://via.placeholder.com/300x600?text=Movie%20Poster");
-        moviePoster.setImage(posterPlaceholder);
-
         movieModel.loadMovies();
 
+        moviePoster.setImage(posterPlaceholder);
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
@@ -70,12 +71,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
-                    try {
-                        //TODO: Make this crossplatform??? ONLY WORKS ON WINDOWS
-                        Runtime.getRuntime().exec("CMD /C START " + movieList.getSelectionModel().getSelectedItem().getFilepath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    App.getHost().showDocument(movieList.getSelectionModel().getSelectedItem().getFilepath());
                 }
             }
         });
