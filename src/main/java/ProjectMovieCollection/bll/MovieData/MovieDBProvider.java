@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ProjectMovieCollection.bll.MovieData.interfaces.IMovieInfoProvider;
 import ProjectMovieCollection.utils.config.MovieDBConfig;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
@@ -26,6 +25,10 @@ public class MovieDBProvider implements IMovieInfoProvider {
     public String getMovieImage(int id) {
         TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
         MovieDb movie = movies.getMovie(id, "en");
+
+        if (movie.getPosterPath() == null) {
+            return null;
+        }
 
         return imgBaseUrl + movie.getPosterPath();
     }

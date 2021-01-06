@@ -1,8 +1,7 @@
 package ProjectMovieCollection.bll;
 
-import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieData.interfaces.IMovieInfoProvider;
+import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
 import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
@@ -17,8 +16,6 @@ import java.util.List;
 public class MovieManager extends EventHandler<IMovieManagerListener> {
 
     private List<Movie> movies = new ArrayList<>();
-    private List<Category> categories = new ArrayList<>();
-
     private IMovieInfoProvider infoProvider;
 
     public MovieManager() {
@@ -42,6 +39,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
                 Movie m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
                 m.setDesc(infoProvider.getMovieDesc(id));
                 m.setImgPath(infoProvider.getMovieImage(id));
+                m.setProviderID(id);
                 movies.add(m);
                 loaded++;
                 for (IMovieManagerListener listener : getListeners()) {
@@ -58,8 +56,6 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         m.setImgPath(infoProvider.getMovieImage(id));
     }
 
-    public List<Movie> getAllMovies() {
-        return movies;
-    }
+    public List<Movie> getAllMovies() { return movies; }
 
 }
