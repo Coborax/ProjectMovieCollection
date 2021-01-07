@@ -1,11 +1,11 @@
-package ProjectMovieCollection.dal.dao.interfaces;
+package ProjectMovieCollection.dal.dao;
 
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
 
 import java.util.List;
 
-public interface CategoryRepository {
+public interface ICategoryRepository {
 
     /**
      * Creates category

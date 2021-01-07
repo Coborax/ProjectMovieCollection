@@ -5,7 +5,6 @@
 package ProjectMovieCollection.dal.dao;
 
 import ProjectMovieCollection.be.Category;
-import ProjectMovieCollection.dal.dao.interfaces.CategoryRepository;
 import ProjectMovieCollection.utils.db.DBConnector;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
 
@@ -13,7 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDAO implements CategoryRepository {
+public class CategoryDAO implements ICategoryRepository {
 
     private DBConnector dbConnector;
 

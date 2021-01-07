@@ -1,4 +1,4 @@
-package ProjectMovieCollection.dal.dao.interfaces;
+package ProjectMovieCollection.dal.dao;
 
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
@@ -6,7 +6,7 @@ import ProjectMovieCollection.utils.exception.MovieDAOException;
 
 import java.util.List;
 
-public interface MovieRepository {
+public interface IMovieRepository {
 
     /**
      * Creates movie
