@@ -2,7 +2,7 @@
  * @author kjell
  */
 
-package ProjectMovieCollection.dal.dao;
+package ProjectMovieCollection.dal;
 
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.utils.db.DBConnector;
