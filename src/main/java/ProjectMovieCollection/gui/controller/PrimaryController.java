@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import ProjectMovieCollection.App;
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
+import ProjectMovieCollection.bll.AlertManager;
 import ProjectMovieCollection.gui.model.MovieBrowserModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
 import com.jfoenix.controls.JFXSpinner;
@@ -46,6 +47,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
 
     private Image posterPlaceholder;
     private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
+    private AlertManager am = new AlertManager();
 
 
     @Override
@@ -109,5 +111,10 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @Override
     public void updateLoadProgress(float progress) {
         spinner.setProgress(progress);
+    }
+
+    @Override
+    public void errorOccured(Exception e) {
+        am.displayAlertError("An error occurred!", e.getMessage());
     }
 }

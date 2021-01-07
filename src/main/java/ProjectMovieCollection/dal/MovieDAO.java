@@ -25,13 +25,16 @@ public class MovieDAO implements IMovieRepository {
     public Movie create(Movie movie) throws MovieDAOException {
 
         try (Connection connection = dbConnector.getConnection()) {
-            String sql = "INSERT INTO Movies (title, rating, filepath, lastview) VALUES (?,?,?,?);";
+            String sql = "INSERT INTO Movies (title, rating, filepath, lastview, imgPath, providerID, description) VALUES (?,?,?,?,?,?,?);";
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, movie.getTitle());
             statement.setInt(2, movie.getRating());
             statement.setString(3, movie.getFilepath());
-            statement.setDate(4, (Date) movie.getLastView());
+            statement.setDate(4, new java.sql.Date(movie.getLastView().getTime()));
+            statement.setString(5, movie.getImgPath());
+            statement.setInt(6, movie.getProviderID());
+            statement.setString(7, movie.getDesc());
             statement.execute();
 
             try(ResultSet keys = statement.getGeneratedKeys()) {
@@ -92,8 +95,15 @@ public class MovieDAO implements IMovieRepository {
                     int id = resultSet.getInt("id");
                     String title = resultSet.getString("title");
                     String filepath = resultSet.getString("filepath");
+                    String imgPath = resultSet.getString("imgPath");
+                    int providerID = resultSet.getInt("providerID");
+                    String desc = resultSet.getString("description");
 
                     Movie movie = new Movie(id, title, filepath);
+                    movie.setImgPath(imgPath);
+                    movie.setProviderID(providerID);
+                    movie.setDesc(desc);
+                    movie.setCategories(getCategories(movie));
                     allMovies.add(movie);
                 }
             }
@@ -111,7 +121,7 @@ public class MovieDAO implements IMovieRepository {
         List<Category> categoryList = new ArrayList<>();
 
         try (Connection connection = dbConnector.getConnection()) {
-            String sql = "SELECT id, name FROM CatMovie INNER JOIN Categories ON categoryID=Categories.id WHERE movieID=?;";
+            String sql = "SELECT CatMovie.id, name FROM CatMovie INNER JOIN Categories ON categoryID=Categories.id WHERE movieID=?;";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, movie.getId());
 

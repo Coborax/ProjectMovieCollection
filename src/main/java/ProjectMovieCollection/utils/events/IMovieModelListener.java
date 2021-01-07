@@ -13,4 +13,6 @@ public interface IMovieModelListener {
      */
     void updateLoadProgress(float progress);
 
+    void errorOccured(Exception e);
+
 }
