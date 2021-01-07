@@ -59,17 +59,17 @@
                         </ImageView>
                         <VBox spacing="10.0">
                            <children>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" text="Choose different metadata">
+                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#openMetadataWindow" text="Choose different metadata">
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </JFXButton>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" text="Edit">
+                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#openEditWindow" text="Edit">
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </JFXButton>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" text="Delete">
+                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#deleteMovie" text="Delete">
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
