@@ -13,7 +13,6 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         for (File file : dir.listFiles()) {
             System.out.println(FilenameUtils.getExtension(file.getPath()));
             if (FilenameUtils.getExtension(file.getPath()).equals("mp4") || FilenameUtils.getExtension(file.getPath()).equals("mkv")) {
-                if (checkIfNewMovie(file)) {
+                if (isNewMovie(file)) {
                     String filename = FilenameUtils.getName(file.getPath());
                     String movieName = filename.substring(0, filename.lastIndexOf("."));
 
@@ -62,9 +61,27 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
                 }
             }
         }
+
+        List<Movie> moviesToRemove = new ArrayList<>();
+        for (Movie m : movies) {
+            if (isFileMissing(m, dir.listFiles())) {
+                movieRepository.delete(m);
+                moviesToRemove.add(m);
+            }
+        }
+        movies.removeAll(moviesToRemove);
     }
 
-    private boolean checkIfNewMovie(File file) {
+    private boolean isFileMissing(Movie m, File[] files) {
+        for (File file : files) {
+            if (m.getFilepath().equals(file.getPath())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isNewMovie(File file) {
         for (Movie m : movies) {
             if (m.getFilepath().equals(file.getPath())) {
                 return false;

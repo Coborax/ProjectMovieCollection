@@ -39,7 +39,11 @@ public class MovieDAO implements IMovieRepository {
 
             try(ResultSet keys = statement.getGeneratedKeys()) {
                 if (keys.next()) {
-                    return new Movie(keys.getInt(1), movie.getTitle(), movie.getFilepath());
+                    Movie m = new Movie(keys.getInt(1), movie.getTitle(), movie.getFilepath());
+                    m.setImgPath(movie.getImgPath());
+                    m.setProviderID(movie.getProviderID());
+                    m.setDesc(movie.getDesc());
+                    return m;
                 }
             }
             throw new MovieDAOException("Could not create movie");
