@@ -13,6 +13,8 @@ import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
+import ProjectMovieCollection.utils.exception.MovieDAOException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -32,20 +34,32 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
 
     public void loadAllData() {
         Thread t = new Thread(() -> {
-            movieManager.loadMoviesFromDisk();
-            categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
-            for (IMovieModelListener listener : getListeners()) {
-                listener.dataFetched();
+            try {
+                movieManager.loadMovies();
+            } catch (MovieDAOException e) {
+                Platform.runLater(() -> {
+                    for (IMovieModelListener listener : getListeners()) {
+                        listener.errorOccured(e);
+                    }
+                });
             }
+            categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
+            Platform.runLater(() -> {
+                for (IMovieModelListener listener : getListeners()) {
+                    listener.dataFetched();
+                }
+            });
         });
         t.start();
     }
 
     @Override
     public void updateLoadProgress(float progress) {
-        for (IMovieModelListener listener : getListeners()) {
-            listener.updateLoadProgress(progress);
-        }
+        Platform.runLater(() -> {
+            for (IMovieModelListener listener : getListeners()) {
+                listener.updateLoadProgress(progress);
+            }
+        });
     }
 
     public String getCategoryString(Movie m) {
@@ -73,11 +87,8 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         for (Movie m : movies) {
             if (m.getCategories().contains(category) && !movieList.contains(m)) {
                 movieList.add(m);
-
             }
-
         }
-
     }
 
 }

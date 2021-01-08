@@ -55,6 +55,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
 
     private Image posterPlaceholder;
     private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
+    private AlertManager am = new AlertManager();
 
     AlertManager am = new AlertManager();
 
@@ -124,10 +125,6 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     public void openMetadataWindow(ActionEvent actionEvent) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/editMetadata.fxml"));
-        /*
-         * if "fx:controller" is not set in fxml
-         * fxmlLoader.setController(NewWindowController);
-         */
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
@@ -146,10 +143,6 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     public void openEditWindow(ActionEvent actionEvent) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/editWindow.fxml"));
-        /*
-         * if "fx:controller" is not set in fxml
-         * fxmlLoader.setController(NewWindowController);
-         */
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
@@ -168,10 +161,6 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     public void deleteMovie(ActionEvent actionEvent) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/deleteWindow.fxml"));
-        /*
-         * if "fx:controller" is not set in fxml
-         * fxmlLoader.setController(NewWindowController);
-         */
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
@@ -185,5 +174,9 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
+    @Override
+
+    public void errorOccured(Exception e) {
+        am.displayAlertError("An error occurred!", e.getMessage());
     }
 }
