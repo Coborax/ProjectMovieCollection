@@ -57,8 +57,6 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
     private AlertManager am = new AlertManager();
 
-    AlertManager am = new AlertManager();
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mainContent.setVisible(false);
@@ -174,8 +172,9 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
-    @Override
+    }
 
+    @Override
     public void errorOccured(Exception e) {
         am.displayAlertError("An error occurred!", e.getMessage());
     }
