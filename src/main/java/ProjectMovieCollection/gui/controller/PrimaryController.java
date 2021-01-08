@@ -58,7 +58,6 @@ public class PrimaryController implements Initializable, IMovieModelListener {
 
     AlertManager am = new AlertManager();
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mainContent.setVisible(false);
