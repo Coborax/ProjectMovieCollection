@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox fx:id="hBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.DeleteWindowController">
+   <children>
+      <VBox alignment="CENTER" styleClass="mainContent" stylesheets="@../css/main.css">
+         <children>
+            <JFXTextArea editable="false" focusColor="#4d4d4d" prefHeight="112.0" prefWidth="374.0" text="&#10;Are you sure you want to delete this movie?">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </JFXTextArea>
+            <ButtonBar>
+               <buttons>
+                  <JFXButton buttonType="RAISED" onAction="#deleteButton" text="Delete" />
+                  <JFXButton buttonType="RAISED" onAction="#cancelButton" text="Cancel" />
+               </buttons>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="12.0" />
+               </VBox.margin>
+            </ButtonBar>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</HBox>

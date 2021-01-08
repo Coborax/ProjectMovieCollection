@@ -85,7 +85,7 @@
                               <Font name="System Bold" size="34.0" />
                            </font>
                         </Label>
-                        <Label text="Rating: 10/10">
+                        <Label fx:id="ratingLabel" text="Rating: Not Rated">
                            <font>
                               <Font size="22.0" />
                            </font>

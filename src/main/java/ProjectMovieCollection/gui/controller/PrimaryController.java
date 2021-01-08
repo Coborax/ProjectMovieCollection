@@ -28,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PrimaryController implements Initializable, IMovieModelListener {
@@ -122,24 +123,68 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     }
 
     public void openMetadataWindow(ActionEvent actionEvent) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/editMetadata.fxml"));
-        Parent root = null;
-
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/editMetadata.fxml"));
+        /*
+         * if "fx:controller" is not set in fxml
+         * fxmlLoader.setController(NewWindowController);
+         */
+        Scene scene = null;
         try {
-            root = loader.load();
+            scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Stage stage = new Stage();
         stage.setTitle("Edit Metadata");
-        stage.setScene(new Scene(root));
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
         stage.showAndWait();
     }
 
     public void openEditWindow(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/editWindow.fxml"));
+        /*
+         * if "fx:controller" is not set in fxml
+         * fxmlLoader.setController(NewWindowController);
+         */
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Edit Movie");
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     public void deleteMovie(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/deleteWindow.fxml"));
+        /*
+         * if "fx:controller" is not set in fxml
+         * fxmlLoader.setController(NewWindowController);
+         */
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Delete Movie");
+        stage.centerOnScreen();
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 }
