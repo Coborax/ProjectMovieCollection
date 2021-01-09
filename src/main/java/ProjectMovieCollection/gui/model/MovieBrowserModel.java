@@ -13,6 +13,7 @@ import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
+import ProjectMovieCollection.utils.exception.CategoryDAOException;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -22,12 +23,15 @@ import java.util.List;
 
 public class MovieBrowserModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
 
-    private MovieManager movieManager = new MovieManager();
-    private CategoryManager categoryManager = new CategoryManager();
+    private MovieManager movieManager;
+    private CategoryManager categoryManager;
 
     private ObservableList<Movie> movieList;
 
-    public MovieBrowserModel() {
+    public MovieBrowserModel() throws CategoryDAOException {
+        movieManager = new MovieManager();
+        categoryManager = new CategoryManager();
+
         movieManager.addListener(this);
         movieList = FXCollections.observableArrayList();
     }
@@ -35,15 +39,18 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
     public void loadAllData() {
         Thread t = new Thread(() -> {
             try {
+                //Do the loading
                 movieManager.loadMovies();
-            } catch (MovieDAOException e) {
+                categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
+            } catch (MovieDAOException | CategoryDAOException e) {
+                //Notify listeners that an error has occurred
                 Platform.runLater(() -> {
                     for (IMovieModelListener listener : getListeners()) {
-                        listener.errorOccured(e);
+                        listener.errorOccurred(e);
                     }
                 });
             }
-            categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
+            //Tell listeners that the data has been fetched
             Platform.runLater(() -> {
                 for (IMovieModelListener listener : getListeners()) {
                     listener.dataFetched();

@@ -67,7 +67,7 @@ public class CategoryDAO implements ICategoryRepository {
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
                     int id = resultSet.getInt("id");
-                    String name = resultSet.getString("title");
+                    String name = resultSet.getString("name");
 
                     Category cat = new Category(id, name);
                     allCategories.add(cat);
