@@ -14,6 +14,8 @@ import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -53,6 +55,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @FXML
     private JFXSpinner spinner;
 
+    private static Movie selectedItem;
     private Image posterPlaceholder;
     private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
     private AlertManager am = new AlertManager();
@@ -61,7 +64,6 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     public void initialize(URL location, ResourceBundle resources) {
         mainContent.setVisible(false);
         loader.setVisible(true);
-
         mainContent.managedProperty().bind(mainContent.visibleProperty());
         loader.managedProperty().bind(loader.visibleProperty());
 
@@ -74,8 +76,16 @@ public class PrimaryController implements Initializable, IMovieModelListener {
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
                 if (newValue != null) {
                     updateUIToMovie(newValue);
+                    selectedItem = newValue;
                 }
 
+            }
+        });
+
+        movieList.getItems().addListener(new ListChangeListener<Movie>() {
+            @Override
+            public void onChanged(Change<? extends Movie> change) {
+                movieList.setItems(movieBrowserModel.getObservableMovieList());
             }
         });
 
@@ -120,62 +130,43 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         spinner.setProgress(progress);
     }
 
-    public void openMetadataWindow(ActionEvent actionEvent) {
+    public void showNewWindow(String title, String fxml) {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/editMetadata.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/" + fxml));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            e.printStackTrace();
+            am.displayAlertError("Could not open window","Unable to open " + title + " window");
         }
         Stage stage = new Stage();
-        stage.setTitle("Edit Metadata");
+        stage.setTitle(title);
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
+    }
+
+    public void openMetadataWindow(ActionEvent actionEvent) {
+        showNewWindow("Edit Metadata","editMetadataWindow.fxml");
     }
 
     public void openEditWindow(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/editWindow.fxml"));
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = new Stage();
-        stage.setTitle("Edit Movie");
-        stage.centerOnScreen();
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.showAndWait();
+        showNewWindow("Edit Movie","editWindow.fxml");
     }
 
     public void deleteMovie(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/deleteWindow.fxml"));
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = new Stage();
-        stage.setTitle("Delete Movie");
-        stage.centerOnScreen();
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.showAndWait();
+        showNewWindow("Delete Movie","deleteWindow.fxml");
     }
 
     @Override
     public void errorOccured(Exception e) {
         am.displayAlertError("An error occurred!", e.getMessage());
     }
+
+    public Movie getSelectedItem() {
+        return selectedItem;
+    }
+
 }

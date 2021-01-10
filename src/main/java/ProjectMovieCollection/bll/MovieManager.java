@@ -9,6 +9,7 @@ import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
 import ProjectMovieCollection.utils.settings.Settings;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -112,5 +113,11 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
     }
 
     public List<Movie> getAllMovies() { return movies; }
+
+    public void deleteMovie(Movie movie) throws MovieDAOException, IOException {
+        movies.remove(movie);
+        movieRepository.delete(movie);
+        FileUtils.forceDelete(new File(movie.getFilepath()));
+    }
 
 }
