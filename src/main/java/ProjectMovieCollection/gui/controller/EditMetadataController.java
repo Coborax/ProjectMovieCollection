@@ -42,7 +42,7 @@ public class EditMetadataController implements Initializable {
     public void confirmButton(ActionEvent actionEvent) {
         //TODO: Implementation needed
         if (relatedMovieList.getSelectionModel().getSelectedItem() == null) {
-            am.displayAlertError("No Movie Selected", "Please select a movie");
+            am.displayError("No Movie Selected", "Please select a movie");
         } else {
             Stage stage = (Stage) VBox.getScene().getWindow();
             stage.close();

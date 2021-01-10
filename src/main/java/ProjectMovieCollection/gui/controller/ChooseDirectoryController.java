@@ -54,9 +54,9 @@ public class ChooseDirectoryController {
             dm.confirm();
             App.setRoot("view/primary", 1280, 720);
         } catch (MovieDirectoryException e) {
-            am.displayAlertError("No Directory Selected","Please select a directory before continuing.");
+            am.displayError("No Directory Selected","Please select a directory before continuing.");
         } catch (IOException e) {
-            am.displayAlertError("Could not load next window", "Could not load next window");
+            am.displayError("Could not load next window", "Could not load next window");
             e.printStackTrace();
         }
     }

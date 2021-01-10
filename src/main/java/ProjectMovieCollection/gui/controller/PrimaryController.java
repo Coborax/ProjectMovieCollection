@@ -2,6 +2,7 @@ package ProjectMovieCollection.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import ProjectMovieCollection.App;
@@ -10,26 +11,24 @@ import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.bll.AlertManager;
 import ProjectMovieCollection.gui.model.MovieBrowserModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
-import com.jfoenix.controls.JFXSpinner;
-import com.jfoenix.controls.JFXTextArea;
+import ProjectMovieCollection.utils.exception.MovieDAOException;
+import com.jfoenix.controls.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -55,10 +54,9 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @FXML
     private JFXSpinner spinner;
 
-    private static Movie selectedItem;
     private Image posterPlaceholder;
     private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
-    private AlertManager am = new AlertManager();
+    private AlertManager alertManager = new AlertManager();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -76,7 +74,6 @@ public class PrimaryController implements Initializable, IMovieModelListener {
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
                 if (newValue != null) {
                     updateUIToMovie(newValue);
-                    selectedItem = newValue;
                 }
 
             }
@@ -137,7 +134,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         try {
             scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            am.displayAlertError("Could not open window","Unable to open " + title + " window");
+            alertManager.displayError("Could not open window","Unable to open " + title + " window");
         }
         Stage stage = new Stage();
         stage.setTitle(title);
@@ -157,16 +154,33 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     }
 
     public void deleteMovie(ActionEvent actionEvent) {
-        showNewWindow("Delete Movie","deleteWindow.fxml");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.NONE);
+        alert.setTitle("Delete Movie");
+        alert.setHeaderText("You are about to delete " + movieList.getSelectionModel().getSelectedItem());
+        alert.setContentText("Are you ok with this?");
+
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            try {
+                movieBrowserModel.deleteMovie(movieList.getSelectionModel().getSelectedItem());
+                movieList.setItems(movieBrowserModel.getObservableMovieList());
+            } catch (MovieDAOException e) {
+                alertManager.displayError("Could not connect to database","Unable to connect to database");
+            } catch (IOException e) {
+                alertManager.displayError("An Error Occurred", "Unable to delete movie" + movieList.getSelectionModel().getSelectedItem());
+            }
+        } else {
+            alert.close();
+        }
+
     }
 
     @Override
     public void errorOccured(Exception e) {
-        am.displayAlertError("An error occurred!", e.getMessage());
-    }
-
-    public Movie getSelectedItem() {
-        return selectedItem;
+        alertManager.displayError("An error occurred!", e.getMessage());
     }
 
 }
