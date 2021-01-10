@@ -154,28 +154,31 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     }
 
     public void deleteMovie(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initModality(Modality.NONE);
-        alert.setTitle("Delete Movie");
-        alert.setHeaderText("You are about to delete " + movieList.getSelectionModel().getSelectedItem());
-        alert.setContentText("Are you ok with this?");
+        if (movieList.getSelectionModel().getSelectedItem() != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
+            alert.setTitle("Delete Movie");
+            alert.setHeaderText("You are about to delete " + movieList.getSelectionModel().getSelectedItem());
+            alert.setContentText("Are you ok with this?");
+            alert.initModality(Modality.APPLICATION_MODAL);
 
-        Optional<ButtonType> result = alert.showAndWait();
+            Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.get() == ButtonType.OK) {
-            try {
-                movieBrowserModel.deleteMovie(movieList.getSelectionModel().getSelectedItem());
-                movieList.setItems(movieBrowserModel.getObservableMovieList());
-            } catch (MovieDAOException e) {
-                alertManager.displayError("Could not connect to database","Unable to connect to database");
-            } catch (IOException e) {
-                alertManager.displayError("An Error Occurred", "Unable to delete movie" + movieList.getSelectionModel().getSelectedItem());
+            if (result.get() == ButtonType.OK) {
+                try {
+                    movieBrowserModel.deleteMovie(movieList.getSelectionModel().getSelectedItem());
+                    movieList.setItems(movieBrowserModel.getObservableMovieList());
+                } catch (MovieDAOException e) {
+                    alertManager.displayError("Could not connect to database", "Unable to connect to database");
+                } catch (IOException e) {
+                    alertManager.displayError("An Error Occurred", "Unable to delete movie" + movieList.getSelectionModel().getSelectedItem());
+                }
+            } else {
+                alert.close();
             }
         } else {
-            alert.close();
+            alertManager.displayError("No Movie Selected","Please select a movie before deleting it!");
         }
-
     }
 
     @Override
