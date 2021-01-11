@@ -126,7 +126,9 @@ public class PrimaryController extends BaseController implements Initializable, 
     private void updateUIToMovie(Movie m) {
         movieTitle.setText(m.getTitle());
         movieDesc.setText(m.getDesc());
-        movieRating.setText("Rating: " + m.getRating() + "/10");
+        if (m.getRating() != -1 ) {
+            movieRating.setText("Rating: " + m.getRating() + "/10");
+        }
         categories.setText(movieBrowserModel.getCategoryString(m));
         try {
             moviePoster.setImage(new Image(m.getImgPath()));

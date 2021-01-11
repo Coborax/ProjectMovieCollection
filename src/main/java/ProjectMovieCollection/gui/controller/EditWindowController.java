@@ -86,8 +86,9 @@ public class EditWindowController extends BaseController implements Initializabl
     public void confirmButton(ActionEvent actionEvent) {
         title = titleTextField.getText();
         description = descriptionTextArea.getText();
-        rating = ratingBox.getValue().getText();
-        System.out.println(rating);
+        if (ratingBox.getValue() != null) {
+            rating = ratingBox.getValue().getText();
+        }
 
         try {
             editMovieModel.updateMovie(title, description, rating);
