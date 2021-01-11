@@ -6,8 +6,10 @@ import java.util.ResourceBundle;
 import ProjectMovieCollection.App;
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
+import ProjectMovieCollection.bll.AlertManager;
 import ProjectMovieCollection.gui.model.MovieBrowserModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
+import ProjectMovieCollection.utils.exception.CategoryDAOException;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.value.ChangeListener;
@@ -45,11 +47,18 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     private JFXSpinner spinner;
 
     private Image posterPlaceholder;
-    private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
+    private MovieBrowserModel movieBrowserModel;
+    private AlertManager am = new AlertManager();
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            movieBrowserModel = new MovieBrowserModel();
+        } catch (CategoryDAOException e) {
+            am.displayAlertError(e);
+        }
+
         mainContent.setVisible(false);
         loader.setVisible(true);
 
@@ -109,5 +118,10 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     @Override
     public void updateLoadProgress(float progress) {
         spinner.setProgress(progress);
+    }
+
+    @Override
+    public void errorOccurred(Exception e) {
+        am.displayAlertError("An error occurred!", e.getMessage());
     }
 }

@@ -13,4 +13,10 @@ public interface IMovieModelListener {
      */
     void updateLoadProgress(float progress);
 
+    /**
+     * Called when an error occurs
+     * @param e The error
+     */
+    void errorOccurred(Exception e);
+
 }

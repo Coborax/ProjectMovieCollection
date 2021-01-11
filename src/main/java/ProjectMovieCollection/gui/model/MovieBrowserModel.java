@@ -13,6 +13,9 @@ import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
+import ProjectMovieCollection.utils.exception.CategoryDAOException;
+import ProjectMovieCollection.utils.exception.MovieDAOException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -20,32 +23,50 @@ import java.util.List;
 
 public class MovieBrowserModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
 
-    private MovieManager movieManager = new MovieManager();
-    private CategoryManager categoryManager = new CategoryManager();
+    private MovieManager movieManager;
+    private CategoryManager categoryManager;
 
     private ObservableList<Movie> movieList;
 
-    public MovieBrowserModel() {
+    public MovieBrowserModel() throws CategoryDAOException {
+        movieManager = new MovieManager();
+        categoryManager = new CategoryManager();
+
         movieManager.addListener(this);
         movieList = FXCollections.observableArrayList();
     }
 
     public void loadAllData() {
         Thread t = new Thread(() -> {
-            movieManager.loadMoviesFromDisk();
-            categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
-            for (IMovieModelListener listener : getListeners()) {
-                listener.dataFetched();
+            try {
+                //Do the loading
+                movieManager.loadMovies();
+                categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
+            } catch (MovieDAOException | CategoryDAOException e) {
+                //Notify listeners that an error has occurred
+                Platform.runLater(() -> {
+                    for (IMovieModelListener listener : getListeners()) {
+                        listener.errorOccurred(e);
+                    }
+                });
             }
+            //Tell listeners that the data has been fetched
+            Platform.runLater(() -> {
+                for (IMovieModelListener listener : getListeners()) {
+                    listener.dataFetched();
+                }
+            });
         });
         t.start();
     }
 
     @Override
     public void updateLoadProgress(float progress) {
-        for (IMovieModelListener listener : getListeners()) {
-            listener.updateLoadProgress(progress);
-        }
+        Platform.runLater(() -> {
+            for (IMovieModelListener listener : getListeners()) {
+                listener.updateLoadProgress(progress);
+            }
+        });
     }
 
     public String getCategoryString(Movie m) {
@@ -73,11 +94,8 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         for (Movie m : movies) {
             if (m.getCategories().contains(category) && !movieList.contains(m)) {
                 movieList.add(m);
-
             }
-
         }
-
     }
 
 }

@@ -15,4 +15,8 @@ public class AlertManager {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public void displayAlertError(Exception e) {
+        displayAlertError("An error has occurred", e.getMessage());
+    }
 }
