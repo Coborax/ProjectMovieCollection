@@ -67,7 +67,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         try {
             movieBrowserModel = new MovieBrowserModel();
         } catch (CategoryDAOException e) {
-            am.displayAlertError(e);
+            am.displayError(e);
         }
 
         mainContent.setVisible(false);
@@ -144,7 +144,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         try {
             scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            alertManager.displayError("Could not open window","Unable to open " + title + " window");
+            am.displayError("Could not open window","Unable to open " + title + " window");
         }
         Stage stage = new Stage();
         stage.setTitle(title);
@@ -179,21 +179,21 @@ public class PrimaryController implements Initializable, IMovieModelListener {
                     movieBrowserModel.deleteMovie(movieList.getSelectionModel().getSelectedItem());
                     movieList.setItems(movieBrowserModel.getObservableMovieList());
                 } catch (MovieDAOException e) {
-                    alertManager.displayError("Could not connect to database", "Unable to connect to database");
+                    am.displayError("Could not connect to database", "Unable to connect to database");
                 } catch (IOException e) {
-                    alertManager.displayError("An Error Occurred", "Unable to delete movie" + movieList.getSelectionModel().getSelectedItem());
+                    am.displayError("An Error Occurred", "Unable to delete movie" + movieList.getSelectionModel().getSelectedItem());
                 }
             } else {
                 alert.close();
             }
         } else {
-            alertManager.displayError("No movie selected","Please select a movie before deleting it!");
+            am.displayError("No movie selected","Please select a movie before deleting it!");
         }
     }
 
     @Override
-    public void errorOccured(Exception e) {
-        alertManager.displayError("An error occurred!", e.getMessage());
+    public void errorOccurred(Exception e) {
+        am.displayError(e);
     }
 
 }

@@ -16,7 +16,7 @@ public class AlertManager {
         alert.showAndWait();
     }
 
-    public void displayAlertError(Exception e) {
-        displayAlertError("An error has occurred", e.getMessage());
+    public void displayError(Exception e) {
+        displayError("An error has occurred", e.getMessage());
     }
 }
