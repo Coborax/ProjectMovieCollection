@@ -5,4 +5,5 @@
 package ProjectMovieCollection.gui.controller;
 
 public class EditWindowController {
+
 }

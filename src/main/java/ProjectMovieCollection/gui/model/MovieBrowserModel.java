@@ -32,7 +32,7 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
     private ObservableList<Movie> movieList;
 
     public MovieBrowserModel(MovieManager movieManager) throws CategoryDAOException {
-        this.movieManager =movieManager;
+        this.movieManager = movieManager;
         categoryManager = new CategoryManager();
 
         this.movieManager.addListener(this);
