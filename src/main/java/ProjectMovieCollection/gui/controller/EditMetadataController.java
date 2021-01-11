@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class EditMetadataController implements Initializable {
+public class EditMetadataController extends BaseController implements Initializable {
 
     @FXML
     private JFXTextField movieID;
@@ -72,11 +72,15 @@ public class EditMetadataController implements Initializable {
         editMetadataModel.search(movieID.getText());
     }
 
-    public void setMovieManager(MovieManager manager) {
-        editMetadataModel.setMovieManager(manager);
+    @Override
+    public void setMovieManager(MovieManager movieManager) {
+        editMetadataModel.setMovieManager(movieManager);
+        super.setMovieManager(movieManager);
     }
 
-    public void setMovie(Movie m) {
-        editMetadataModel.setMovie(m);
+    @Override
+    public void setSelectedMovie(Movie selectedMovie) {
+        editMetadataModel.setMovie(selectedMovie);
+        super.setSelectedMovie(selectedMovie);
     }
 }

@@ -36,7 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class PrimaryController implements Initializable, IMovieModelListener {
+public class PrimaryController extends BaseController implements Initializable, IMovieModelListener {
 
     @FXML
     private ImageView moviePoster;
@@ -60,14 +60,17 @@ public class PrimaryController implements Initializable, IMovieModelListener {
 
     private Image posterPlaceholder;
 
-    private MovieManager movieManager = new MovieManager();
     private MovieBrowserModel movieBrowserModel;
     private AlertManager am = new AlertManager();
+
+    public PrimaryController() {
+        setMovieManager(new MovieManager());
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            movieBrowserModel = new MovieBrowserModel(movieManager);
+            movieBrowserModel = new MovieBrowserModel(getMovieManager());
         } catch (CategoryDAOException e) {
             am.displayError(e);
         }
@@ -85,6 +88,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
                 if (newValue != null) {
+                    setSelectedMovie(newValue);
                     updateUIToMovie(newValue);
                 }
 
@@ -142,16 +146,18 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     public void showNewWindow(String title, String fxml) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/" + fxml));
+
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
             am.displayError("Could not open window","Unable to open " + title + " window");
+            return;
         }
 
-        EditMetadataController controller = (EditMetadataController)fxmlLoader.getController();
-        controller.setMovieManager(movieManager);
-        controller.setMovie(movieList.getSelectionModel().getSelectedItem());
+        BaseController controller = fxmlLoader.getController();
+        controller.setMovieManager(getMovieManager());
+        controller.setSelectedMovie(getSelectedMovie());
 
         Stage stage = new Stage();
         stage.setTitle(title);

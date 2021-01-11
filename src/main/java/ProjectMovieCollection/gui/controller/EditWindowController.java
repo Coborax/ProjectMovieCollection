@@ -4,6 +4,6 @@
 
 package ProjectMovieCollection.gui.controller;
 
-public class EditWindowController {
+public class EditWindowController extends BaseController {
 
 }
