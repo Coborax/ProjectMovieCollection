@@ -158,8 +158,8 @@ public class PrimaryController implements Initializable, IMovieModelListener {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
             alert.setTitle("Delete Movie");
-            alert.setHeaderText("You are about to delete " + movieList.getSelectionModel().getSelectedItem());
-            alert.setContentText("Are you ok with this?");
+            alert.setHeaderText("You are about to delete \"" + movieList.getSelectionModel().getSelectedItem() + "\"");
+            alert.setContentText("Are you sure you want to delete this movie?");
             alert.initModality(Modality.APPLICATION_MODAL);
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -177,7 +177,7 @@ public class PrimaryController implements Initializable, IMovieModelListener {
                 alert.close();
             }
         } else {
-            alertManager.displayError("No Movie Selected","Please select a movie before deleting it!");
+            alertManager.displayError("No movie selected","Please select a movie before deleting it!");
         }
     }
 
