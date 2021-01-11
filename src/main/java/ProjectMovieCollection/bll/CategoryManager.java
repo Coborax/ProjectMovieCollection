@@ -12,6 +12,7 @@ import ProjectMovieCollection.utils.exception.MovieDAOException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CategoryManager {
@@ -28,6 +29,7 @@ public class CategoryManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         categories = categoryRepository.getAll();
         Category allCategory = new Category(-1, "All");
@@ -66,6 +68,8 @@ public class CategoryManager {
         }
     }
 
-    public List<Category> getAllCategories() { return categories; }
+    public List<Category> getAllCategories() {
+        return categories;
+    }
 
 }

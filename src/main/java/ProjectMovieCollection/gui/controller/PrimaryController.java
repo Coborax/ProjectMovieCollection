@@ -13,7 +13,6 @@ import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.gui.model.MovieBrowserModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
-import com.jfoenix.controls.*;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
@@ -31,7 +30,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -46,7 +44,6 @@ public class PrimaryController extends BaseController implements Initializable, 
     private JFXTextArea movieDesc;
     @FXML
     private Label categories;
-
     @FXML
     private ListView<Movie> movieList;
     @FXML
@@ -57,11 +54,13 @@ public class PrimaryController extends BaseController implements Initializable, 
     private VBox loader;
     @FXML
     private JFXSpinner spinner;
+    @FXML
+    private Label movieRating;
 
     private Image posterPlaceholder;
 
     private MovieBrowserModel movieBrowserModel;
-    private AlertManager am = new AlertManager();
+    private AlertManager alertManager;
 
     public PrimaryController() {
         setMovieManager(new MovieManager());
@@ -71,27 +70,32 @@ public class PrimaryController extends BaseController implements Initializable, 
     public void initialize(URL location, ResourceBundle resources) {
         try {
             movieBrowserModel = new MovieBrowserModel(getMovieManager());
+            alertManager = new AlertManager();
         } catch (CategoryDAOException e) {
-            am.displayError(e);
+            alertManager.displayError(e);
         }
 
         mainContent.setVisible(false);
         loader.setVisible(true);
         mainContent.managedProperty().bind(mainContent.visibleProperty());
         loader.managedProperty().bind(loader.visibleProperty());
-
         movieBrowserModel.addListener(this);
         movieBrowserModel.loadAllData();
-
         posterPlaceholder = moviePoster.getImage();
+
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
                 if (newValue != null) {
                     setSelectedMovie(newValue);
                     updateUIToMovie(newValue);
-                }
 
+                    if (newValue.getRating() == -1) {
+                        movieRating.setText("Rating: Not Rated");
+                    } else {
+                        movieRating.setText("Rating: " + newValue.getRating() + "/10");
+                    }
+                }
             }
         });
 
@@ -122,6 +126,7 @@ public class PrimaryController extends BaseController implements Initializable, 
     private void updateUIToMovie(Movie m) {
         movieTitle.setText(m.getTitle());
         movieDesc.setText(m.getDesc());
+        movieRating.setText("Rating: " + m.getRating() + "/10");
         categories.setText(movieBrowserModel.getCategoryString(m));
         try {
             moviePoster.setImage(new Image(m.getImgPath()));
@@ -148,12 +153,11 @@ public class PrimaryController extends BaseController implements Initializable, 
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/" + fxml));
 
-            Scene scene = null;
+            Scene scene;
             try {
                 scene = new Scene(fxmlLoader.load());
             } catch (IOException e) {
-                //am.displayError("Could not open window", "Unable to open " + title + " window");
-                e.printStackTrace();
+                alertManager.displayError("Could not open window", "Unable to open " + title + " window");
                 return;
             }
 
@@ -171,7 +175,7 @@ public class PrimaryController extends BaseController implements Initializable, 
 
             updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
         } else {
-            am.displayError("No movie selected", "Please select a movie!");
+            alertManager.displayError("No movie selected", "Please select a movie!");
         }
     }
 
@@ -199,22 +203,22 @@ public class PrimaryController extends BaseController implements Initializable, 
                     movieBrowserModel.deleteMovie(movieList.getSelectionModel().getSelectedItem());
                     movieList.setItems(movieBrowserModel.getObservableMovieList());
                 } catch (MovieDAOException e) {
-                    am.displayError("Could not connect to database", "Check your internet connection");
+                    alertManager.displayError("Could not connect to database", "Check your internet connection");
                 } catch (IOException e) {
-                    am.displayError("An Error Occurred", "Unable to delete movie" + movieList.getSelectionModel().getSelectedItem());
+                    alertManager.displayError("An Error Occurred", "Unable to delete movie" +
+                            movieList.getSelectionModel().getSelectedItem());
                 }
             } else {
                 alert.close();
             }
         } else {
-            am.displayError("No movie selected","Please select a movie!");
+            alertManager.displayError("No movie selected","Please select a movie!");
         }
     }
 
-
     @Override
     public void errorOccurred(Exception e) {
-        am.displayError(e);
+        alertManager.displayError(e);
     }
 
 }

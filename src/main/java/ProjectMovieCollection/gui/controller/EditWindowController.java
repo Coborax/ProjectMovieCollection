@@ -59,34 +59,6 @@ public class EditWindowController extends BaseController implements Initializabl
             ratingBox.getItems().add(new Label(ratingList.get(i).toString()));
         }
 
-        /*if (getSelectedMovie().getRating() != -1) {
-            ratingBox.setPromptText(String.valueOf(getSelectedMovie().getRating()));
-        } else {
-            ratingBox.setPromptText("Not rated");
-        }*/
-
-        ratingBox.getItems().addListener(new ListChangeListener<Label>() {
-            @Override
-            public void onChanged(Change<? extends Label> change) {
-                if (change.toString() != null) {
-                    rating = change.toString();
-                }
-            }
-        });
-
-        titleTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                title = t1;
-            }
-        });
-
-        descriptionTextArea.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                description = t1;
-            }
-        });
     }
 
     @Override
@@ -100,12 +72,23 @@ public class EditWindowController extends BaseController implements Initializabl
         titleTextField.setText(selectedMovie.getTitle());
         descriptionTextArea.setText(selectedMovie.getDesc());
 
+        if (selectedMovie.getRating() != -1) {
+            ratingBox.setPromptText(String.valueOf(selectedMovie.getRating()));
+        } else {
+            ratingBox.setPromptText("Not rated");
+        }
+
         editMovieModel.setMovie(selectedMovie);
         super.setSelectedMovie(selectedMovie);
     }
 
 
     public void confirmButton(ActionEvent actionEvent) {
+        title = titleTextField.getText();
+        description = descriptionTextArea.getText();
+        rating = ratingBox.getValue().getText();
+        System.out.println(rating);
+
         try {
             editMovieModel.updateMovie(title, description, rating);
         } catch (MovieDAOException e) {
