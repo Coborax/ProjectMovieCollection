@@ -1,6 +1,7 @@
 package ProjectMovieCollection.bll.MovieData;
 
 import ProjectMovieCollection.be.Movie;
+import ProjectMovieCollection.be.MovieSearchResult;
 
 import java.io.File;
 import java.util.List;
@@ -41,5 +42,7 @@ public interface IMovieInfoProvider {
      * @return an ID of the movie, for the provider
      */
     int guessMovie(String title);
+
+    List<MovieSearchResult> search(String term);
 
 }

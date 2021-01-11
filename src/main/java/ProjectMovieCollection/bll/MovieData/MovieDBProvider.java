@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ProjectMovieCollection.be.MovieSearchResult;
 import ProjectMovieCollection.utils.config.MovieDBConfig;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
@@ -73,6 +74,20 @@ public class MovieDBProvider implements IMovieInfoProvider {
             return movie.getId();
         }
         return -1;
+    }
+
+    public List<MovieSearchResult> search(String term) {
+        List<MovieSearchResult> result = new ArrayList<>();
+
+        TmdbSearch search = new TmdbApi(config.getAPIKey()).getSearch();
+        MovieResultsPage resultsPage = search.searchMovie(term, 0, null, true, 0);
+
+        if (resultsPage.getResults().size() != 0) {
+            for (MovieDb movieDb : resultsPage.getResults()) {
+                result.add(new MovieSearchResult(movieDb.getId(), movieDb.getTitle()));
+            }
+        }
+        return result;
     }
 
 }

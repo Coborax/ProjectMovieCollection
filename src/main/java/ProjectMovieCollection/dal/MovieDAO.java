@@ -28,13 +28,7 @@ public class MovieDAO implements IMovieRepository {
             String sql = "INSERT INTO Movies (title, rating, filepath, lastview, imgPath, providerID, description) VALUES (?,?,?,?,?,?,?);";
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            statement.setString(1, movie.getTitle());
-            statement.setInt(2, movie.getRating());
-            statement.setString(3, movie.getFilepath());
-            statement.setDate(4, new java.sql.Date(movie.getLastView().getTime()));
-            statement.setString(5, movie.getImgPath());
-            statement.setInt(6, movie.getProviderID());
-            statement.setString(7, movie.getDesc());
+            makePreparedStatement(movie, statement);
             statement.execute();
 
             try(ResultSet keys = statement.getGeneratedKeys()) {
@@ -70,13 +64,10 @@ public class MovieDAO implements IMovieRepository {
     public void update(Movie movie) throws MovieDAOException {
 
         try(Connection connection = dbConnector.getConnection()) {
-            String sql = "UPDATE Movies SET title=?, rating=?, filepath=?, lastview=?, WHERE id=?";
+            String sql = "UPDATE Movies SET title=?, rating=?, filepath=?, lastview=?, imgPath=?, providerID=?, description=? WHERE id=?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, movie.getTitle());
-            statement.setInt(2, movie.getRating());
-            statement.setString(3, movie.getFilepath());
-            statement.setDate(4, (Date) movie.getLastView());
-            statement.setInt(5, movie.getId());
+            makePreparedStatement(movie, statement);
+            statement.setInt(8, movie.getId());
             statement.execute();
 
         } catch (SQLException e) {
@@ -142,6 +133,16 @@ public class MovieDAO implements IMovieRepository {
         }
 
         return categoryList;
+    }
+
+    private void makePreparedStatement(Movie movie, PreparedStatement statement) throws SQLException {
+        statement.setString(1, movie.getTitle());
+        statement.setInt(2, movie.getRating());
+        statement.setString(3, movie.getFilepath());
+        statement.setDate(4, new Date(movie.getLastView().getTime()));
+        statement.setString(5, movie.getImgPath());
+        statement.setInt(6, movie.getProviderID());
+        statement.setString(7, movie.getDesc());
     }
 
 }

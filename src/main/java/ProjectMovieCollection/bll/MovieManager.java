@@ -120,4 +120,8 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         FileUtils.forceDelete(new File(movie.getFilepath()));
     }
 
+    public void updateMovie(Movie m) throws MovieDAOException {
+        movieRepository.update(m);
+    }
+
 }
