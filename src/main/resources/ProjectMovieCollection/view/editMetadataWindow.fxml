@@ -9,7 +9,7 @@
 
 <VBox fx:id="VBox" alignment="CENTER" styleClass="mainContent" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.EditMetadataController">
    <children>
-      <JFXListView fx:id="relatedMovieList" />
+      <JFXListView fx:id="relatedMovieList" VBox.vgrow="ALWAYS" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="300.0">
          <children>
             <JFXTextField fx:id="movieID" alignment="CENTER" onAction="#searchForMovies" promptText="Movie Name">
