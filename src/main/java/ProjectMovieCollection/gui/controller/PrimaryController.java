@@ -13,6 +13,9 @@ import ProjectMovieCollection.gui.model.MovieBrowserModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
 import com.jfoenix.controls.*;
+import ProjectMovieCollection.utils.exception.CategoryDAOException;
+import com.jfoenix.controls.JFXSpinner;
+import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -55,11 +58,18 @@ public class PrimaryController implements Initializable, IMovieModelListener {
     private JFXSpinner spinner;
 
     private Image posterPlaceholder;
-    private MovieBrowserModel movieBrowserModel = new MovieBrowserModel();
-    private AlertManager alertManager = new AlertManager();
+
+    private MovieBrowserModel movieBrowserModel;
+    private AlertManager am = new AlertManager();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            movieBrowserModel = new MovieBrowserModel();
+        } catch (CategoryDAOException e) {
+            am.displayAlertError(e);
+        }
+
         mainContent.setVisible(false);
         loader.setVisible(true);
         mainContent.managedProperty().bind(mainContent.visibleProperty());

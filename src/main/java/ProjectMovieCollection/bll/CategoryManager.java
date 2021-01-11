@@ -4,6 +4,11 @@ import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
 import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.dal.CategoryDAO;
+import ProjectMovieCollection.dal.ICategoryRepository;
+import ProjectMovieCollection.dal.MovieDAO;
+import ProjectMovieCollection.utils.exception.CategoryDAOException;
+import ProjectMovieCollection.utils.exception.MovieDAOException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,28 +18,33 @@ public class CategoryManager {
 
     private List<Category> categories = new ArrayList<>();
     private IMovieInfoProvider infoProvider;
+    private ICategoryRepository categoryRepository;
 
-    public CategoryManager() {
+    public CategoryManager() throws CategoryDAOException {
         //TODO: Throw to UI
         try {
             infoProvider = new MovieDBProvider();
+            categoryRepository = new CategoryDAO();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        categories = categoryRepository.getAll();
+        Category allCategory = new Category(-1, "All");
+        categories.add(0, allCategory);
     }
 
-    public void loadCategoriesFromMovieList(List<Movie> movies) {
+    public void loadCategoriesFromMovieList(List<Movie> movies) throws CategoryDAOException {
         for (Movie m : movies) {
-            loadCategoriesFromMovie(m);
+            if (m.getCategories().size() == 0) {
+                loadCategoriesFromMovie(m);
+            }
         }
     }
 
-    private void loadCategoriesFromMovie(Movie m) {
+    private void loadCategoriesFromMovie(Movie m) throws CategoryDAOException {
         List<String> categoryStrings = new ArrayList<>();
-        String allCategory = "All";
-
-        categoryStrings.add(allCategory);
-        categoryStrings.set(0, allCategory);
+        m.addCategory(categories.get(0));
 
         if (m.getProviderID() != -1) {
             categoryStrings.addAll(infoProvider.getCategories(m.getProviderID()));
@@ -48,7 +58,8 @@ public class CategoryManager {
                 }
             }
             if (categoryToAdd == null) {
-                categoryToAdd = new Category(-1, category);
+                Category tempCategory = new Category(-1, category);
+                categoryToAdd = categoryRepository.create(tempCategory);
                 categories.add(categoryToAdd);
             }
             m.addCategory(categoryToAdd);
