@@ -70,13 +70,16 @@ public class MovieDAO implements IMovieRepository {
     public void update(Movie movie) throws MovieDAOException {
 
         try(Connection connection = dbConnector.getConnection()) {
-            String sql = "UPDATE Movies SET title=?, rating=?, filepath=?, lastview=?, WHERE id=?";
+            String sql = "UPDATE Movies SET title=?, rating=?, filepath=?, lastview=?, imgPath=?, providerID=?, description=? WHERE id=?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, movie.getTitle());
             statement.setInt(2, movie.getRating());
             statement.setString(3, movie.getFilepath());
-            statement.setDate(4, (Date) movie.getLastView());
-            statement.setInt(5, movie.getId());
+            statement.setDate(4, new java.sql.Date(movie.getLastView().getTime()));
+            statement.setString(5, movie.getImgPath());
+            statement.setInt(6, movie.getProviderID());
+            statement.setString(7, movie.getDesc());
+            statement.setInt(8, movie.getId());
             statement.execute();
 
         } catch (SQLException e) {

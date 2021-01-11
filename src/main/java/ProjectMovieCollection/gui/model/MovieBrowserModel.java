@@ -31,11 +31,11 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
 
     private ObservableList<Movie> movieList;
 
-    public MovieBrowserModel() throws CategoryDAOException {
-        movieManager = new MovieManager();
+    public MovieBrowserModel(MovieManager movieManager) throws CategoryDAOException {
+        this.movieManager =movieManager;
         categoryManager = new CategoryManager();
 
-        movieManager.addListener(this);
+        this.movieManager.addListener(this);
         movieList = FXCollections.observableArrayList();
     }
 

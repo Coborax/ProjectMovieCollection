@@ -9,6 +9,7 @@ import ProjectMovieCollection.App;
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.bll.AlertManager;
+import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.gui.model.MovieBrowserModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
@@ -59,13 +60,14 @@ public class PrimaryController implements Initializable, IMovieModelListener {
 
     private Image posterPlaceholder;
 
+    private MovieManager movieManager = new MovieManager();
     private MovieBrowserModel movieBrowserModel;
     private AlertManager am = new AlertManager();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            movieBrowserModel = new MovieBrowserModel();
+            movieBrowserModel = new MovieBrowserModel(movieManager);
         } catch (CategoryDAOException e) {
             am.displayError(e);
         }
@@ -146,6 +148,11 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         } catch (IOException e) {
             am.displayError("Could not open window","Unable to open " + title + " window");
         }
+
+        EditMetadataController controller = (EditMetadataController)fxmlLoader.getController();
+        controller.setMovieManager(movieManager);
+        controller.setMovie(movieList.getSelectionModel().getSelectedItem());
+
         Stage stage = new Stage();
         stage.setTitle(title);
         stage.centerOnScreen();
@@ -153,6 +160,8 @@ public class PrimaryController implements Initializable, IMovieModelListener {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
+
+        updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
     }
 
     public void openMetadataWindow(ActionEvent actionEvent) {
