@@ -8,7 +8,7 @@ import javafx.scene.control.Alert;
 
 public class AlertManager {
 
-    public void displayAlertError(String header, String message) {
+    public void displayError(String header, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error Dialog");
         alert.setHeaderText(header);

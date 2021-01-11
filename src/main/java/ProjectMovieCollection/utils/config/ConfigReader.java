@@ -27,7 +27,6 @@ public abstract class ConfigReader {
             if (inputStream != null) {
                 properties.load(inputStream);
             } else {
-                //TODO: Throw custom error to UI
                 throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
             }
         } catch (Exception e) {

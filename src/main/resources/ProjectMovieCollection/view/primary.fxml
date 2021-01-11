@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox styleClass="mainContent" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.PrimaryController">
+<VBox fx:id="VBox" styleClass="mainContent" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.PrimaryController">
    <children>
       <HBox fx:id="mainContent" alignment="CENTER" prefHeight="720.0" prefWidth="1280.0" spacing="10.0">
          <children>
@@ -59,17 +59,17 @@
                         </ImageView>
                         <VBox spacing="10.0">
                            <children>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" text="Choose different metadata">
+                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#openMetadataWindow" text="Choose different metadata">
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </JFXButton>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" text="Edit">
+                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#openEditWindow" text="Edit">
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </JFXButton>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" text="Delete">
+                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#deleteMovie" text="Delete">
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
@@ -85,7 +85,7 @@
                               <Font name="System Bold" size="34.0" />
                            </font>
                         </Label>
-                        <Label text="Rating: 10/10">
+                        <Label fx:id="ratingLabel" text="Rating: Not Rated">
                            <font>
                               <Font size="22.0" />
                            </font>

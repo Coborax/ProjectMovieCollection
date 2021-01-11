@@ -18,7 +18,10 @@ import ProjectMovieCollection.utils.exception.MovieDAOException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class MovieBrowserModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
@@ -96,6 +99,11 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
                 movieList.add(m);
             }
         }
+    }
+
+    public void deleteMovie(Movie movie) throws MovieDAOException, IOException {
+        movieManager.deleteMovie(movie);
+        movieList.remove(movie);
     }
 
 }
