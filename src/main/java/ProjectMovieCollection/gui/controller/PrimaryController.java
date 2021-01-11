@@ -144,30 +144,35 @@ public class PrimaryController extends BaseController implements Initializable, 
     }
 
     public void showNewWindow(String title, String fxml) {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/" + fxml));
+        if (movieList.getSelectionModel().getSelectedItem() != null) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/" + fxml));
 
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            am.displayError("Could not open window","Unable to open " + title + " window");
-            return;
+            Scene scene = null;
+            try {
+                scene = new Scene(fxmlLoader.load());
+            } catch (IOException e) {
+                //am.displayError("Could not open window", "Unable to open " + title + " window");
+                e.printStackTrace();
+                return;
+            }
+
+            BaseController controller = fxmlLoader.getController();
+            controller.setMovieManager(getMovieManager());
+            controller.setSelectedMovie(getSelectedMovie());
+
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.centerOnScreen();
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
+        } else {
+            am.displayError("No movie selected", "Please select a movie!");
         }
-
-        BaseController controller = fxmlLoader.getController();
-        controller.setMovieManager(getMovieManager());
-        controller.setSelectedMovie(getSelectedMovie());
-
-        Stage stage = new Stage();
-        stage.setTitle(title);
-        stage.centerOnScreen();
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.showAndWait();
-
-        updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
     }
 
     public void openMetadataWindow(ActionEvent actionEvent) {
@@ -175,7 +180,7 @@ public class PrimaryController extends BaseController implements Initializable, 
     }
 
     public void openEditWindow(ActionEvent actionEvent) {
-        showNewWindow("Edit Movie","editWindow.fxml");
+        showNewWindow("Edit Movie","editMovieWindow.fxml");
     }
 
     public void deleteMovie(ActionEvent actionEvent) {
@@ -194,7 +199,7 @@ public class PrimaryController extends BaseController implements Initializable, 
                     movieBrowserModel.deleteMovie(movieList.getSelectionModel().getSelectedItem());
                     movieList.setItems(movieBrowserModel.getObservableMovieList());
                 } catch (MovieDAOException e) {
-                    am.displayError("Could not connect to database", "Unable to connect to database");
+                    am.displayError("Could not connect to database", "Check your internet connection");
                 } catch (IOException e) {
                     am.displayError("An Error Occurred", "Unable to delete movie" + movieList.getSelectionModel().getSelectedItem());
                 }
@@ -202,9 +207,10 @@ public class PrimaryController extends BaseController implements Initializable, 
                 alert.close();
             }
         } else {
-            am.displayError("No movie selected","Please select a movie before deleting it!");
+            am.displayError("No movie selected","Please select a movie!");
         }
     }
+
 
     @Override
     public void errorOccurred(Exception e) {
