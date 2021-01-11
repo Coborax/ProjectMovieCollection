@@ -34,9 +34,7 @@ public class ChooseDirectoryController {
             File file = dir.showDialog(vBox.getScene().getWindow());
             // Update the DIRECTORY static variable.
             Settings.DIRECTORY = file.toString();
-        } catch (NullPointerException e) {
-            System.out.println("Cancelled directory selection ");
-        }
+        } catch (NullPointerException ignored) { }
 
         if (Settings.DIRECTORY != null) {
             // Sets the text field to the selected directory.
