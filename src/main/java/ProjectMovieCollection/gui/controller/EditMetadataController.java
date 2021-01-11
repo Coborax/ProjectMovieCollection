@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class EditMetadataController implements Initializable {
+public class EditMetadataController extends BaseController implements Initializable {
 
     @FXML
     private JFXTextField movieID;
@@ -32,16 +32,16 @@ public class EditMetadataController implements Initializable {
     @FXML
     private JFXListView<MovieSearchResult> relatedMovieList;
 
-    private AlertManager am;
+    private AlertManager alertManager;
     private EditMetadataModel editMetadataModel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        am = new AlertManager();
+        alertManager = new AlertManager();
         try {
             editMetadataModel = new EditMetadataModel();
         } catch (IOException e) {
-            am.displayError(e);
+            alertManager.displayError(e);
         }
 
         relatedMovieList.setItems(editMetadataModel.getObservableChoices());
@@ -53,30 +53,28 @@ public class EditMetadataController implements Initializable {
     }
 
     public void confirmButton(ActionEvent actionEvent) {
-        //TODO: Implementation needed
-        if (relatedMovieList.getSelectionModel().getSelectedItem() == null) {
-            am.displayError("No Movie Selected", "Please select a movie");
-        } else {
-            try {
-                editMetadataModel.updateFromMovieResult(relatedMovieList.getSelectionModel().getSelectedItem());
-            } catch (MovieDAOException e) {
-                am.displayError(e);
-            }
-            Stage stage = (Stage) VBox.getScene().getWindow();
-            stage.close();
+        try {
+            editMetadataModel.updateFromMovieResult(relatedMovieList.getSelectionModel().getSelectedItem());
+        } catch (MovieDAOException e) {
+            alertManager.displayError("Could not connect to database","Check your internet connection!");
         }
-
+        Stage stage = (Stage) VBox.getScene().getWindow();
+        stage.close();
     }
 
     public void searchForMovies(ActionEvent actionEvent) {
         editMetadataModel.search(movieID.getText());
     }
 
-    public void setMovieManager(MovieManager manager) {
-        editMetadataModel.setMovieManager(manager);
+    @Override
+    public void setMovieManager(MovieManager movieManager) {
+        editMetadataModel.setMovieManager(movieManager);
+        super.setMovieManager(movieManager);
     }
 
-    public void setMovie(Movie m) {
-        editMetadataModel.setMovie(m);
+    @Override
+    public void setSelectedMovie(Movie selectedMovie) {
+        editMetadataModel.setMovie(selectedMovie);
+        super.setSelectedMovie(selectedMovie);
     }
 }

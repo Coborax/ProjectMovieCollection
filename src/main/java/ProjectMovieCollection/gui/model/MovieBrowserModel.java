@@ -32,7 +32,7 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
     private ObservableList<Movie> movieList;
 
     public MovieBrowserModel(MovieManager movieManager) throws CategoryDAOException {
-        this.movieManager =movieManager;
+        this.movieManager = movieManager;
         categoryManager = new CategoryManager();
 
         this.movieManager.addListener(this);
@@ -42,18 +42,19 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
     public void loadAllData() {
         Thread t = new Thread(() -> {
             try {
-                //Do the loading
+                // Do the loading
                 movieManager.loadMovies();
                 categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
             } catch (MovieDAOException | CategoryDAOException e) {
-                //Notify listeners that an error has occurred
+                // Notify listeners that an error has occurred
                 Platform.runLater(() -> {
                     for (IMovieModelListener listener : getListeners()) {
                         listener.errorOccurred(e);
                     }
                 });
             }
-            //Tell listeners that the data has been fetched
+
+            // Tell listeners that the data has been fetched
             Platform.runLater(() -> {
                 for (IMovieModelListener listener : getListeners()) {
                     listener.dataFetched();
@@ -89,6 +90,9 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
     public ObservableList<Category> getObservableCategoryList() {
         return FXCollections.observableList(categoryManager.getAllCategories());
     }
+
+
+
 
     public void filterMovies(Category category) {
         List<Movie> movies = movieManager.getAllMovies();

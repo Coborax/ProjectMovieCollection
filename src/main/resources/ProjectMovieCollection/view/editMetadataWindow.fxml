@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="VBox" alignment="CENTER" styleClass="mainContent" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.EditMetadataController">
+<VBox fx:id="VBox" alignment="CENTER" prefHeight="500.0" prefWidth="438.0" styleClass="mainContent" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.EditMetadataController">
    <children>
-      <JFXListView fx:id="relatedMovieList" VBox.vgrow="ALWAYS" />
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="300.0">
+      <JFXListView fx:id="relatedMovieList" minHeight="400.0" />
+      <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="100.0" prefWidth="300.0">
          <children>
             <JFXTextField fx:id="movieID" alignment="CENTER" onAction="#searchForMovies" promptText="Movie Name">
                <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="10.0" left="10.0" right="96.0" top="10.0" />
                </HBox.margin></JFXTextField>
             <JFXButton buttonType="RAISED" minHeight="-Infinity" minWidth="-Infinity" onAction="#confirmButton" text="Confirm">
                <HBox.margin>

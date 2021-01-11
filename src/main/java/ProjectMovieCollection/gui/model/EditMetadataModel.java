@@ -51,10 +51,6 @@ public class EditMetadataModel {
         this.movie = movie;
     }
 
-    public MovieManager getMovieManager() {
-        return movieManager;
-    }
-
     public void setMovieManager(MovieManager movieManager) {
         this.movieManager = movieManager;
     }

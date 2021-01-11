@@ -41,7 +41,6 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         movies.addAll(movieRepository.getAll());
 
         for (File file : dir.listFiles()) {
-            System.out.println(FilenameUtils.getExtension(file.getPath()));
             if (FilenameUtils.getExtension(file.getPath()).equals("mp4") || FilenameUtils.getExtension(file.getPath()).equals("mkv")) {
                 if (isNewMovie(file)) {
                     String filename = FilenameUtils.getName(file.getPath());
@@ -54,7 +53,6 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
 
                     loaded++;
                     for (IMovieManagerListener listener : getListeners()) {
-                        System.out.println(loaded / totalMovies);
                         listener.updateLoadProgress((float) loaded / (float) totalMovies);
                     }
                 } else {

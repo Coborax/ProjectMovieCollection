@@ -80,17 +80,17 @@
                   </VBox>
                   <VBox spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="movieTitle" prefHeight="50.0" prefWidth="429.0" text="Some movie title">
+                        <Label fx:id="movieTitle" prefHeight="50.0" prefWidth="429.0">
                            <font>
                               <Font name="System Bold" size="34.0" />
                            </font>
                         </Label>
-                        <Label fx:id="ratingLabel" text="Rating: Not Rated">
+                        <Label fx:id="movieRating">
                            <font>
                               <Font size="22.0" />
                            </font>
                         </Label>
-                        <Label fx:id="categories" text="Categories: Action, Drama, Comedy">
+                        <Label fx:id="categories">
                            <font>
                               <Font size="16.0" />
                            </font>
