@@ -59,9 +59,6 @@ public class EditWindowController extends BaseController implements Initializabl
             ratingBox.getItems().add(new Label(ratingList.get(i).toString()));
         }
 
-        titleTextField.setText(getSelectedMovie().getTitle());
-        //descriptionTextArea.setText(getSelectedMovie().getDesc());
-
         /*if (getSelectedMovie().getRating() != -1) {
             ratingBox.setPromptText(String.valueOf(getSelectedMovie().getRating()));
         } else {
@@ -100,6 +97,9 @@ public class EditWindowController extends BaseController implements Initializabl
 
     @Override
     public void setSelectedMovie(Movie selectedMovie) {
+        titleTextField.setText(selectedMovie.getTitle());
+        descriptionTextArea.setText(selectedMovie.getDesc());
+
         editMovieModel.setMovie(selectedMovie);
         super.setSelectedMovie(selectedMovie);
     }
