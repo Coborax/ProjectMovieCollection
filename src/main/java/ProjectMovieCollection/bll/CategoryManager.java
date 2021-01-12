@@ -29,9 +29,7 @@ public class CategoryManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        categories = categoryRepository.getAll();
+        
         Category allCategory = new Category(-1, "All");
         categories.add(0, allCategory);
     }
