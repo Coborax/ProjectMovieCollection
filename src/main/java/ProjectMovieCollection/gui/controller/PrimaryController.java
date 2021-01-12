@@ -123,12 +123,16 @@ public class PrimaryController extends BaseController implements Initializable, 
         });
     }
 
-    private void updateUIToMovie(Movie m) {
+    private void updateUIToMovie(Movie m) throws RuntimeException {
+        // Set movie title
         movieTitle.setText(m.getTitle());
         movieDesc.setText(m.getDesc());
+
+
         if (m.getRating() != -1 ) {
             movieRating.setText("Rating: " + m.getRating() + "/10");
         }
+
         categories.setText(movieBrowserModel.getCategoryString(m));
         try {
             moviePoster.setImage(new Image(m.getImgPath()));
@@ -176,6 +180,10 @@ public class PrimaryController extends BaseController implements Initializable, 
             stage.showAndWait();
 
             updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
+            // Update title in the movies listview
+            movieList.getSelectionModel().clearSelection();
+            movieList.getSelectionModel().select(movieList.getSelectionModel().getSelectedItem());
+
         } else {
             alertManager.displayError("No movie selected", "Please select a movie!");
         }
