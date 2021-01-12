@@ -23,6 +23,7 @@ public class CategoryManager {
     private ICategoryRepository categoryRepository;
     private IMovieRepository movieRepository;
 
+
     public CategoryManager() throws CategoryDAOException {
         //TODO: Throw to UI
         try {
@@ -38,6 +39,12 @@ public class CategoryManager {
         categories.add(0, allCategory);
     }
 
+    /**
+     * Loads categories of a list of movies, from a data provider
+     * @param movies
+     * @throws CategoryDAOException
+     * @throws MovieDAOException
+     */
     public void loadCategoriesFromMovieList(List<Movie> movies) throws CategoryDAOException, MovieDAOException {
         for (Movie m : movies) {
             if (m.getCategories().size() == 0) {
@@ -46,6 +53,12 @@ public class CategoryManager {
         }
     }
 
+    /**
+     * Will load categories from a data provider
+     * @param m The movie to load categories for
+     * @throws CategoryDAOException If there is an error creating new categories on the data storage
+     * @throws MovieDAOException If there is an error adding a new category to the movie in the data storage
+     */
     private void loadCategoriesFromMovie(Movie m) throws CategoryDAOException, MovieDAOException {
         List<String> categoryStrings = new ArrayList<>();
         m.addCategory(categories.get(0));

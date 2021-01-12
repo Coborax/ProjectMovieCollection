@@ -131,22 +131,26 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         return m;
     }
 
-    public void loadMovieInfo(Movie m, int id) {
-        m.setTitle(infoProvider.getMovieTitle(id));
-        m.setDesc(infoProvider.getMovieDesc(id));
-        m.setImgPath(infoProvider.getMovieImage(id));
-    }
-
-    public List<Movie> getAllMovies() { return movies; }
-
+    /**
+     * Deletes a movie from both persistent data storage and disk
+     * @param movie The movie to remove
+     * @throws MovieDAOException If there is an error deleting on data storage
+     * @throws IOException If there is an error deleting the file on disk
+     */
     public void deleteMovie(Movie movie) throws MovieDAOException, IOException {
         movies.remove(movie);
         movieRepository.delete(movie);
         FileUtils.forceDelete(new File(movie.getFilepath()));
     }
 
+    /**
+     * Updates a movie on the data storage
+     * @param m The movie to update
+     * @throws MovieDAOException If there is an error updating the data storage
+     */
     public void updateMovie(Movie m) throws MovieDAOException {
         movieRepository.update(m);
     }
 
+    public List<Movie> getAllMovies() { return movies; }
 }
