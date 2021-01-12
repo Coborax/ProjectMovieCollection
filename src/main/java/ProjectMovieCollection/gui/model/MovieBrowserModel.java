@@ -91,9 +91,6 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         return FXCollections.observableList(categoryManager.getAllCategories());
     }
 
-
-
-
     public void filterMovies(Category category) {
         List<Movie> movies = movieManager.getAllMovies();
         movieList.clear();

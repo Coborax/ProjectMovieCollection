@@ -77,4 +77,8 @@ public class EditMetadataController extends BaseController implements Initializa
         editMetadataModel.setMovie(selectedMovie);
         super.setSelectedMovie(selectedMovie);
     }
+
+    public void searchMovieButton(ActionEvent actionEvent) {
+        editMetadataModel.search(movieID.getText());
+    }
 }
