@@ -18,9 +18,7 @@ import ProjectMovieCollection.utils.exception.MovieDAOException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -44,7 +42,7 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
             try {
                 // Do the loading
                 movieManager.loadMovies();
-                categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
+                categoryManager.createCategoriesFromMovieList(movieManager.getAllMovies());
             } catch (MovieDAOException | CategoryDAOException e) {
                 // Notify listeners that an error has occurred
                 Platform.runLater(() -> {
