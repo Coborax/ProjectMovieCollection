@@ -135,6 +135,20 @@ public class MovieDAO implements IMovieRepository {
         return categoryList;
     }
 
+    @Override
+    public void addCategoryToMovie(Movie m, Category c) throws MovieDAOException {
+        try (Connection connection = dbConnector.getConnection()) {
+            String sql = "INSERT INTO CatMovie (movieID, categoryID) VALUES (?,?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, m.getId());
+            statement.setInt(2, c.getId());
+            statement.execute();
+        } catch (SQLException e) {
+            throw new MovieDAOException("Could not add category to movie", e);
+        }
+    }
+
+
     private void makePreparedStatement(Movie movie, PreparedStatement statement) throws SQLException {
         statement.setString(1, movie.getTitle());
         statement.setInt(2, movie.getRating());

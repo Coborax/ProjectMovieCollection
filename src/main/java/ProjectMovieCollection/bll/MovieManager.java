@@ -33,13 +33,22 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         }
     }
 
+    /**
+     * This method does three things:
+     * 1. Add from persistent data storage - Add all movies from storage
+     * 2. Add new movies - Go through all file on disk, and check for new movies
+     * 3. Cleanup - Go through all movies, and check if it is missing on disk.
+     * @throws MovieDAOException If there is an error with loading movies from persistent data storage
+     */
     public void loadMovies() throws MovieDAOException {
         File dir = new File(Settings.DIRECTORY);
         int totalMovies = dir.listFiles().length;
         int loaded = 0;
 
+        //Add all movies from storage
         movies.addAll(movieRepository.getAll());
 
+        // Go through files in movie directory, and add new movies
         for (File file : dir.listFiles()) {
             if (FilenameUtils.getExtension(file.getPath()).equals("mp4") || FilenameUtils.getExtension(file.getPath()).equals("mkv")) {
                 if (isNewMovie(file)) {
@@ -61,6 +70,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
             }
         }
 
+        // Checks for and deletes movies in storage if the file is missing
         List<Movie> moviesToRemove = new ArrayList<>();
         for (Movie m : movies) {
             if (isFileMissing(m, dir.listFiles())) {
@@ -71,6 +81,12 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         movies.removeAll(moviesToRemove);
     }
 
+    /**
+     * Checks if a movie file is missing
+     * @param m The movie to check
+     * @param files The list of all files
+     * @return True if the file is missing, and false if it is not missing
+     */
     private boolean isFileMissing(Movie m, File[] files) {
         for (File file : files) {
             if (m.getFilepath().equals(file.getPath())) {
@@ -80,6 +96,11 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         return true;
     }
 
+    /**
+     * Checks if there already is an entry in the database for this file
+     * @param file The file to check
+     * @return True if the movie is not in the database, otherwise it returns false
+     */
     private boolean isNewMovie(File file) {
         for (Movie m : movies) {
             if (m.getFilepath().equals(file.getPath())) {
@@ -89,6 +110,12 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         return true;
     }
 
+    /**
+     * Loads information about a movie, from a provider (Only to be used for temporary objects)
+     * @param file The file of the movie
+     * @param movieName The name of the movie
+     * @return A movie with id -1, that has the data loaded from the provider
+     */
     public Movie loadDataFromProvider(File file, String movieName) {
         int id = infoProvider.guessMovie(movieName);
         Movie m;
