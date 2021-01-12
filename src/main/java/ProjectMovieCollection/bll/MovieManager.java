@@ -85,7 +85,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
      * Checks if a movie file is missing
      * @param m The movie to check
      * @param files The list of all files
-     * @return True if the file is missind, and false if it is not missing
+     * @return True if the file is missing, and false if it is not missing
      */
     private boolean isFileMissing(Movie m, File[] files) {
         for (File file : files) {

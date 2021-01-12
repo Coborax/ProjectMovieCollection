@@ -45,4 +45,11 @@ public interface IMovieRepository {
      */
     List<Category> getCategories(Movie movie) throws MovieDAOException;
 
+    /**
+     * Adds a category to a movie
+     * @param m The movie to add the category to
+     * @param c The category to add to a movie
+     */
+    void addCategoryToMovie(Movie m, Category c) throws MovieDAOException;
+
 }

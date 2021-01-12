@@ -42,7 +42,7 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
             try {
                 // Do the loading
                 movieManager.loadMovies();
-                categoryManager.createCategoriesFromMovieList(movieManager.getAllMovies());
+                categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
             } catch (MovieDAOException | CategoryDAOException e) {
                 // Notify listeners that an error has occurred
                 Platform.runLater(() -> {
