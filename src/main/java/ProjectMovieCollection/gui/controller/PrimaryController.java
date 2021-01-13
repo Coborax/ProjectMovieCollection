@@ -18,7 +18,9 @@ import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -56,6 +58,8 @@ public class PrimaryController extends BaseController implements Initializable, 
     private JFXSpinner spinner;
     @FXML
     private Label movieRating;
+    @FXML
+    private TextField searchBox;
 
     private Image posterPlaceholder;
 
@@ -224,6 +228,21 @@ public class PrimaryController extends BaseController implements Initializable, 
         } else {
             alertManager.displayError("No movie selected","Please select a movie!");
         }
+    }
+
+    public void searchMovie(ActionEvent actionEvent){
+        String searchFilter = searchBox.getText().toLowerCase();
+
+        ObservableList<Movie> allMovieList = FXCollections.observableArrayList(movieBrowserModel.getObservableMovieList());
+        ObservableList<Movie> filterMovie = FXCollections.observableArrayList();
+
+        for (Movie m : allMovieList) {
+            if (m.getTitle().toLowerCase().contains(searchFilter)){
+                filterMovie.add(m);
+            }
+        }
+        movieList.setItems(filterMovie);
+
     }
 
     @Override
