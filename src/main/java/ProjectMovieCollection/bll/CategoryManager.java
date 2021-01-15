@@ -50,6 +50,8 @@ public class CategoryManager {
             if (m.getCategories().size() == 0) {
                 loadCategoriesFromMovie(m);
             }
+            //Add all category
+            m.addCategory(categories.get(0));
         }
     }
 

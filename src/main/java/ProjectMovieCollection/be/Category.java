@@ -30,4 +30,14 @@ public class Category {
     public String toString() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Category c = (Category)obj;
+        return id == c.getId();
+    }
 }

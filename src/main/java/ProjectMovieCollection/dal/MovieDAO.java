@@ -116,7 +116,7 @@ public class MovieDAO implements IMovieRepository {
         List<Category> categoryList = new ArrayList<>();
 
         try (Connection connection = dbConnector.getConnection()) {
-            String sql = "SELECT CatMovie.id, name FROM CatMovie INNER JOIN Categories ON categoryID=Categories.id WHERE movieID=?;";
+            String sql = "SELECT Categories.id, name FROM CatMovie INNER JOIN Categories ON categoryID=Categories.id WHERE movieID=?;";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, movie.getId());
 
