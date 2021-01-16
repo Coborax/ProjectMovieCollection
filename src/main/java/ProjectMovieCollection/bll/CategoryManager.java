@@ -10,10 +10,10 @@ import ProjectMovieCollection.dal.IMovieRepository;
 import ProjectMovieCollection.dal.MovieDAO;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
+import ProjectMovieCollection.utils.exception.MovieInfoException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CategoryManager {
@@ -45,10 +45,14 @@ public class CategoryManager {
      * @throws CategoryDAOException
      * @throws MovieDAOException
      */
-    public void loadCategoriesFromMovieList(List<Movie> movies) throws CategoryDAOException, MovieDAOException {
+    public void loadCategoriesFromMovieList(List<Movie> movies) throws CategoryDAOException, MovieDAOException, MovieInfoException {
         for (Movie m : movies) {
             if (m.getCategories().size() == 0) {
-                loadCategoriesFromMovie(m);
+                try {
+                    loadCategoriesFromMovie(m);
+                } catch (MovieInfoException e) {
+                    throw new MovieInfoException("Could not connect to The Movie database");
+                }
             }
             //Add all category
             m.addCategory(categories.get(0));
@@ -61,12 +65,16 @@ public class CategoryManager {
      * @throws CategoryDAOException If there is an error creating new categories on the data storage
      * @throws MovieDAOException If there is an error adding a new category to the movie in the data storage
      */
-    private void loadCategoriesFromMovie(Movie m) throws CategoryDAOException, MovieDAOException {
+    private void loadCategoriesFromMovie(Movie m) throws CategoryDAOException, MovieDAOException, MovieInfoException {
         List<String> categoryStrings = new ArrayList<>();
         m.addCategory(categories.get(0));
 
         if (m.getProviderID() != -1) {
-            categoryStrings.addAll(infoProvider.getCategories(m.getProviderID()));
+            try {
+                categoryStrings.addAll(infoProvider.getCategories(m.getProviderID()));
+            } catch (MovieInfoException e) {
+                throw new MovieInfoException("Could not connect to The Movie database");
+            }
         }
 
         for (String category : categoryStrings) {

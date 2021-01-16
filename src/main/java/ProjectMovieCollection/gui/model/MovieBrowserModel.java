@@ -15,6 +15,7 @@ import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
+import ProjectMovieCollection.utils.exception.MovieInfoException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,8 +25,8 @@ import java.util.List;
 
 public class MovieBrowserModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
 
-    private MovieManager movieManager;
-    private CategoryManager categoryManager;
+    private final MovieManager movieManager;
+    private final CategoryManager categoryManager;
 
     private ObservableList<Movie> movieList;
 
@@ -43,7 +44,7 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
                 // Do the loading
                 movieManager.loadMovies();
                 categoryManager.loadCategoriesFromMovieList(movieManager.getAllMovies());
-            } catch (MovieDAOException | CategoryDAOException e) {
+            } catch (MovieDAOException | CategoryDAOException | MovieInfoException e) {
                 // Notify listeners that an error has occurred
                 Platform.runLater(() -> {
                     for (IMovieModelListener listener : getListeners()) {

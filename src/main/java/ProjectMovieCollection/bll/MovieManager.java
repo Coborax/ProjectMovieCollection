@@ -8,6 +8,7 @@ import ProjectMovieCollection.dal.MovieDAO;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
+import ProjectMovieCollection.utils.exception.MovieInfoException;
 import ProjectMovieCollection.utils.settings.Settings;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -40,7 +41,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
      * 3. Cleanup - Go through all movies, and check if it is missing on disk.
      * @throws MovieDAOException If there is an error with loading movies from persistent data storage
      */
-    public void loadMovies() throws MovieDAOException {
+    public void loadMovies() throws MovieDAOException, MovieInfoException {
         File dir = new File(Settings.DIRECTORY);
         int totalMovies = dir.listFiles().length;
         int loaded = 0;
@@ -55,7 +56,12 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
                     String filename = FilenameUtils.getName(file.getPath());
                     String movieName = filename.substring(0, filename.lastIndexOf("."));
 
-                    Movie tempMovie = loadDataFromProvider(file, movieName);
+                    Movie tempMovie = null;
+                    try {
+                        tempMovie = loadDataFromProvider(file, movieName);
+                    } catch (MovieInfoException e) {
+                        throw new MovieInfoException("Could not connect to The Movie Database");
+                    }
                     Movie newMovie = movieRepository.create(tempMovie);
 
                     movies.add(newMovie);
@@ -116,18 +122,23 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
      * @param movieName The name of the movie
      * @return A movie with id -1, that has the data loaded from the provider
      */
-    public Movie loadDataFromProvider(File file, String movieName) {
-        int id = infoProvider.guessMovie(movieName);
+    public Movie loadDataFromProvider(File file, String movieName) throws MovieInfoException {
+        int id;
         Movie m;
-
-        if (id != -1) {
-            m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
-            m.setDesc(infoProvider.getMovieDesc(id));
-            m.setImgPath(infoProvider.getMovieImage(id));
-            m.setProviderID(id);
-        } else {
-            m = new Movie(-1, FilenameUtils.getName(file.getPath()), file.getPath());
+        try {
+            id = infoProvider.guessMovie(movieName);
+            if (id != -1) {
+                m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
+                m.setDesc(infoProvider.getMovieDesc(id));
+                m.setImgPath(infoProvider.getMovieImage(id));
+                m.setProviderID(id);
+            } else {
+                m = new Movie(-1, FilenameUtils.getName(file.getPath()), file.getPath());
+            }
+        } catch (MovieInfoException e) {
+            throw new MovieInfoException("Could not connect to The Movie Database");
         }
+
         return m;
     }
 
