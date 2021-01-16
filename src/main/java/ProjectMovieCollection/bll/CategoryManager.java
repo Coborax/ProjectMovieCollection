@@ -48,11 +48,7 @@ public class CategoryManager {
     public void loadCategoriesFromMovieList(List<Movie> movies) throws CategoryDAOException, MovieDAOException, MovieInfoException {
         for (Movie m : movies) {
             if (m.getCategories().size() == 0) {
-                try {
-                    loadCategoriesFromMovie(m);
-                } catch (MovieInfoException e) {
-                    throw new MovieInfoException("Could not connect to The Movie database");
-                }
+                loadCategoriesFromMovie(m);
             }
             //Add all category
             m.addCategory(categories.get(0));
@@ -70,11 +66,7 @@ public class CategoryManager {
         m.addCategory(categories.get(0));
 
         if (m.getProviderID() != -1) {
-            try {
-                categoryStrings.addAll(infoProvider.getCategories(m.getProviderID()));
-            } catch (MovieInfoException e) {
-                throw new MovieInfoException("Could not connect to The Movie database");
-            }
+            categoryStrings.addAll(infoProvider.getCategories(m.getProviderID()));
         }
 
         for (String category : categoryStrings) {

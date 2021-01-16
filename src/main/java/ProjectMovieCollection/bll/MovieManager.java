@@ -56,12 +56,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
                     String filename = FilenameUtils.getName(file.getPath());
                     String movieName = filename.substring(0, filename.lastIndexOf("."));
 
-                    Movie tempMovie = null;
-                    try {
-                        tempMovie = loadDataFromProvider(file, movieName);
-                    } catch (MovieInfoException e) {
-                        throw new MovieInfoException("Could not connect to The Movie Database");
-                    }
+                    Movie tempMovie = loadDataFromProvider(file, movieName);
                     Movie newMovie = movieRepository.create(tempMovie);
 
                     movies.add(newMovie);
@@ -123,20 +118,16 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
      * @return A movie with id -1, that has the data loaded from the provider
      */
     public Movie loadDataFromProvider(File file, String movieName) throws MovieInfoException {
-        int id;
+        int id = infoProvider.guessMovie(movieName);
         Movie m;
-        try {
-            id = infoProvider.guessMovie(movieName);
-            if (id != -1) {
-                m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
-                m.setDesc(infoProvider.getMovieDesc(id));
-                m.setImgPath(infoProvider.getMovieImage(id));
-                m.setProviderID(id);
-            } else {
-                m = new Movie(-1, FilenameUtils.getName(file.getPath()), file.getPath());
-            }
-        } catch (MovieInfoException e) {
-            throw new MovieInfoException("Could not connect to The Movie Database");
+
+        if (id != -1) {
+            m = new Movie(-1, infoProvider.getMovieTitle(id), file.getPath());
+            m.setDesc(infoProvider.getMovieDesc(id));
+            m.setImgPath(infoProvider.getMovieImage(id));
+            m.setProviderID(id);
+        } else {
+            m = new Movie(-1, FilenameUtils.getName(file.getPath()), file.getPath());
         }
 
         return m;

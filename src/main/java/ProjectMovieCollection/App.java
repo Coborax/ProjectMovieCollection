@@ -28,9 +28,6 @@ public class App extends Application {
         stage.show();
 
         hostServices = getHostServices();
-
-        MovieDBProvider provider = new MovieDBProvider();
-        provider.getMovieImage(508442);
     }
 
     public static void setRoot(String fxml, int width, int height) throws IOException {
