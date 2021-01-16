@@ -6,12 +6,14 @@ import java.util.List;
 
 import ProjectMovieCollection.be.MovieSearchResult;
 import ProjectMovieCollection.utils.config.MovieDBConfig;
+import ProjectMovieCollection.utils.exception.MovieInfoException;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.TmdbSearch;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
+import info.movito.themoviedbapi.tools.MovieDbException;
 
 public class MovieDBProvider implements IMovieInfoProvider {
 
@@ -24,35 +26,45 @@ public class MovieDBProvider implements IMovieInfoProvider {
     }
 
     @Override
-    public String getMovieImage(int id) {
+    public String getMovieImage(int id) throws MovieInfoException {
         TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
         MovieDb movie = movies.getMovie(id, "en");
 
         if (movie.getPosterPath() == null) {
-            return null;
+            throw new MovieInfoException("Could not get movie poster from https://www.themoviedb.org/");
         }
 
         return imgBaseUrl + movie.getPosterPath();
     }
 
     @Override
-    public String getMovieTitle(int id) {
+    public String getMovieTitle(int id) throws MovieInfoException {
         TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
         MovieDb movie = movies.getMovie(id, "en");
+        String movieTitle = movie.getTitle();
 
-        return movie.getTitle();
+        if (movieTitle == null || movieTitle.isEmpty()) {
+            throw new MovieInfoException("Could not load movie title from https://www.themoviedb.org/");
+        }
+
+        return movieTitle;
     }
 
     @Override
-    public String getMovieDesc(int id) {
+    public String getMovieDesc(int id) throws MovieInfoException {
         TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
         MovieDb movie = movies.getMovie(id, "en");
+        String movieDesc = movie.getOverview();
 
-        return movie.getOverview();
+        if (movieDesc == null || movieDesc.isEmpty()) {
+            throw new MovieInfoException("Could not load movie description from https://www.themoviedb.org/");
+        }
+
+        return movieDesc;
     }
 
     @Override
-    public List<String> getCategories(int id) {
+    public List<String> getCategories(int id) throws MovieInfoException {
         List<String> categories = new ArrayList<>();
 
         TmdbMovies movies = new TmdbApi(config.getAPIKey()).getMovies();
@@ -62,10 +74,14 @@ public class MovieDBProvider implements IMovieInfoProvider {
             categories.add(genre.getName());
         }
 
+        if (categories.size() <= 0) {
+            throw new MovieInfoException("Could not get movie categories from https://www.themoviedb.org/");
+        }
+
         return categories;
     }
 
-    public int guessMovie(String title) {
+    public int guessMovie(String title) throws MovieInfoException {
         TmdbSearch search = new TmdbApi(config.getAPIKey()).getSearch();
         MovieResultsPage resultsPage = search.searchMovie(title, 0, null, true, 0);
 
@@ -73,10 +89,10 @@ public class MovieDBProvider implements IMovieInfoProvider {
             MovieDb movie = resultsPage.getResults().get(0);
             return movie.getId();
         }
-        return -1;
+        throw new MovieDbException("Could not guess a movie");
     }
 
-    public List<MovieSearchResult> search(String term) {
+    public List<MovieSearchResult> search(String term) throws MovieInfoException {
         List<MovieSearchResult> result = new ArrayList<>();
 
         TmdbSearch search = new TmdbApi(config.getAPIKey()).getSearch();
@@ -87,6 +103,11 @@ public class MovieDBProvider implements IMovieInfoProvider {
                 result.add(new MovieSearchResult(movieDb.getId(), movieDb.getTitle()));
             }
         }
+
+        if (result.size() <= 0) {
+            throw new MovieInfoException("Could not get search result from https://www.themoviedb.org/");
+        }
+
         return result;
     }
 
