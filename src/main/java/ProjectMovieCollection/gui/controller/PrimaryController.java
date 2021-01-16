@@ -12,6 +12,7 @@ import ProjectMovieCollection.bll.AlertManager;
 import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.gui.model.MovieBrowserModel;
 import ProjectMovieCollection.utils.events.IMovieModelListener;
+import ProjectMovieCollection.utils.exception.EmptySelectionException;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
 import com.jfoenix.controls.JFXSpinner;
@@ -72,21 +73,24 @@ public class PrimaryController extends BaseController implements Initializable, 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        alertManager = new AlertManager();
         try {
             movieBrowserModel = new MovieBrowserModel(getMovieManager());
-            alertManager = new AlertManager();
         } catch (CategoryDAOException e) {
             alertManager.displayError(e);
         }
 
+        // Hides the main content and shows a loading bar when the data is loading
         mainContent.setVisible(false);
         loader.setVisible(true);
         mainContent.managedProperty().bind(mainContent.visibleProperty());
         loader.managedProperty().bind(loader.visibleProperty());
+
         movieBrowserModel.addListener(this);
         movieBrowserModel.loadAllData();
         posterPlaceholder = moviePoster.getImage();
 
+        // Listener that changes updates the movie UI (title, description and rating)
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
@@ -95,6 +99,7 @@ public class PrimaryController extends BaseController implements Initializable, 
                     updateUIToMovie(newValue);
 
                     if (newValue.getRating() == -1) {
+                        // If the movie has not been rated yet
                         movieRating.setText("Rating: Not Rated");
                     } else {
                         movieRating.setText("Rating: " + newValue.getRating() + "/10");
@@ -103,13 +108,7 @@ public class PrimaryController extends BaseController implements Initializable, 
             }
         });
 
-        movieList.getItems().addListener(new ListChangeListener<Movie>() {
-            @Override
-            public void onChanged(Change<? extends Movie> change) {
-                movieList.setItems(movieBrowserModel.getObservableMovieList());
-            }
-        });
-
+        // Opens a movie if double clicked.
         movieList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -119,32 +118,48 @@ public class PrimaryController extends BaseController implements Initializable, 
             }
         });
 
+        // Filters movies when a new category is selected
         categoryList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Category>() {
             @Override
             public void changed(ObservableValue<? extends Category> observableValue, Category category, Category t1) {
                 movieBrowserModel.filterMovies(t1);
             }
         });
+
+        movieList.getItems().addListener(new ListChangeListener<Movie>() {
+            @Override
+            public void onChanged(Change<? extends Movie> change) {
+                movieList.setItems(movieBrowserModel.getObservableMovieList());
+            }
+        });
     }
 
-    private void updateUIToMovie(Movie m) throws RuntimeException {
-        // Set movie title
-        movieTitle.setText(m.getTitle());
-        movieDesc.setText(m.getDesc());
+    /**
+     * Updates the UI depending on the movie selected
+     * @param movie Movie to be changed
+     */
+    private void updateUIToMovie(Movie movie) {
+        movieTitle.setText(movie.getTitle());
+        movieDesc.setText(movie.getDesc());
 
-
-        if (m.getRating() != -1 ) {
-            movieRating.setText("Rating: " + m.getRating() + "/10");
+        if (movie.getRating() != -1 ) {
+            movieRating.setText("Rating: " + movie.getRating() + "/10");
         }
 
-        categories.setText(movieBrowserModel.getCategoryString(m));
+        // Shows the movies categories
+        categories.setText(movieBrowserModel.getCategoryString(movie));
+
+        // Shows the movies image from TMDB. If it can't find it, it's replaced by a placeholder.
         try {
-            moviePoster.setImage(new Image(m.getImgPath()));
+            moviePoster.setImage(new Image(movie.getImgPath()));
         } catch (Exception e) {
             moviePoster.setImage(posterPlaceholder);
         }
     }
 
+    /**
+     * Sets the main content to visible again.
+     */
     @Override
     public void dataFetched() {
         movieList.setItems(movieBrowserModel.getObservableMovieList());
@@ -153,11 +168,20 @@ public class PrimaryController extends BaseController implements Initializable, 
         mainContent.setVisible(true);
     }
 
+    /**
+     * Sets the loading bars progression
+     * @param progress The new progress value
+     */
     @Override
     public void updateLoadProgress(float progress) {
         spinner.setProgress(progress);
     }
 
+    /**
+     * Opens a new window depending
+     * @param title The windows title
+     * @param fxml The windows fxml file
+     */
     public void showNewWindow(String title, String fxml) {
         if (movieList.getSelectionModel().getSelectedItem() != null) {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -171,6 +195,7 @@ public class PrimaryController extends BaseController implements Initializable, 
                 return;
             }
 
+            // Gets the controller from the BaseController class
             BaseController controller = fxmlLoader.getController();
             controller.setMovieManager(getMovieManager());
             controller.setSelectedMovie(getSelectedMovie());
@@ -189,7 +214,11 @@ public class PrimaryController extends BaseController implements Initializable, 
             movieList.getSelectionModel().select(movieList.getSelectionModel().getSelectedItem());
 
         } else {
-            alertManager.displayError("No movie selected", "Please select a movie!");
+            try {
+                throw new EmptySelectionException("No movie selected");
+            } catch (EmptySelectionException e) {
+                alertManager.displayError("No movie selected", "Please select a movie!");
+            }
         }
     }
 
@@ -201,13 +230,17 @@ public class PrimaryController extends BaseController implements Initializable, 
         showNewWindow("Edit Movie","editMovieWindow.fxml");
     }
 
+    /**
+     * Deletes the selected movie, warns the user beforehand that it's irreversible
+     * @param actionEvent
+     */
     public void deleteMovie(ActionEvent actionEvent) {
         if (movieList.getSelectionModel().getSelectedItem() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
             alert.setTitle("Delete Movie");
             alert.setHeaderText("You are about to delete \"" + movieList.getSelectionModel().getSelectedItem() + "\"");
-            alert.setContentText("Are you sure you want to delete this movie?");
+            alert.setContentText("Are you sure you want to delete this movie? This cannot be reverted");
             alert.initModality(Modality.APPLICATION_MODAL);
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -230,6 +263,10 @@ public class PrimaryController extends BaseController implements Initializable, 
         }
     }
 
+    /**
+     * Searches for a movie
+     * @param actionEvent
+     */
     public void searchMovie(ActionEvent actionEvent){
         String searchFilter = searchBox.getText().toLowerCase();
 
@@ -245,6 +282,10 @@ public class PrimaryController extends BaseController implements Initializable, 
 
     }
 
+    /**
+     * Displays an error as an alert
+     * @param e The error
+     */
     @Override
     public void errorOccurred(Exception e) {
         alertManager.displayError(e);

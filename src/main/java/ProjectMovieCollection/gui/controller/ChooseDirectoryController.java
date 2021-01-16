@@ -26,13 +26,19 @@ public class ChooseDirectoryController {
     private final AlertManager alertManager = new AlertManager();
     private final DirectoryChooser dir = new DirectoryChooser();
 
-    public void browseButtonAction(ActionEvent actionEvent) {
+    /**
+     * Browse directory button, changes the static variable DIRECTORY depending on the selected directory.
+     * @param actionEvent
+     */
+    public void browseButton(ActionEvent actionEvent) {
         try {
             // Opens the explorer and sets the selected directory as a File datatype.
             File file = dir.showDialog(vBox.getScene().getWindow());
             // Update the DIRECTORY static variable.
             Settings.DIRECTORY = file.toString();
-        } catch (NullPointerException ignored) { }
+        } catch (NullPointerException ignored) {
+            // Ignored because nothing should happen when directory selection is cancelled
+        }
 
         if (Settings.DIRECTORY != null) {
             // Sets the text field to the selected directory.
@@ -44,12 +50,14 @@ public class ChooseDirectoryController {
      * Throws exception if confirmation failed, then displays an alert to inform the user of the error.
      * @param actionEvent
      */
-    public void confirmButtonAction(ActionEvent actionEvent) {
+    public void confirmButton(ActionEvent actionEvent) {
         try {
             directoryModel.confirm();
             App.setRoot("view/primary", 1280, 720);
         } catch (MovieDirectoryException e) {
-            alertManager.displayError("No Directory Selected","Please select a directory before continuing.");
+            alertManager.displayError("No Directory Selected",
+                    "Please select a directory before continuing.");
+
         } catch (IOException e) {
             alertManager.displayError("Could not connect to the database", "Check your internet connection!");
         }

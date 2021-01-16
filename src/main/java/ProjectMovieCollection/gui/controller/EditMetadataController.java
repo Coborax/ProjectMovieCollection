@@ -1,5 +1,5 @@
 /**
- * @author kjell
+ * @author Mikkel
  */
 
 package ProjectMovieCollection.gui.controller;
@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
+/**
+ * Edit Metadata window, changes a movies information depending on the selected movie in the list of searched movies.
+ */
 public class EditMetadataController extends BaseController implements Initializable {
 
     @FXML
@@ -49,11 +51,19 @@ public class EditMetadataController extends BaseController implements Initializa
         relatedMovieList.setItems(editMetadataModel.getObservableChoices());
     }
 
+    /**
+     * Closes the window
+     * @param actionEvent
+     */
     public void cancelButton(ActionEvent actionEvent) {
         Stage stage = (Stage) VBox.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Updates the movies information and closes the window
+     * @param actionEvent
+     */
     public void confirmButton(ActionEvent actionEvent) {
         if (relatedMovieList.getSelectionModel().getSelectedItem() == null) {
             try {
@@ -63,8 +73,11 @@ public class EditMetadataController extends BaseController implements Initializa
             }
         } else {
             try {
+                // Updates the movie from the selected movie in relatedMovieList
                 editMetadataModel.updateFromMovieResult(relatedMovieList.getSelectionModel().getSelectedItem());
-            } catch (MovieDAOException | MovieInfoException e) {
+            } catch (MovieInfoException e) {
+                alertManager.displayError("Could not gather all data", "The Movie Database might be offline");
+            } catch (MovieDAOException e) {
                 alertManager.displayError("Could not connect to database", "Check your internet connection!");
             }
             Stage stage = (Stage) VBox.getScene().getWindow();
@@ -72,6 +85,10 @@ public class EditMetadataController extends BaseController implements Initializa
         }
     }
 
+    /**
+     * Search button, searches for a movie from given textField.
+     * @param actionEvent
+     */
     public void searchForMovies(ActionEvent actionEvent) {
         try {
             editMetadataModel.search(movieID.getText());
@@ -92,11 +109,4 @@ public class EditMetadataController extends BaseController implements Initializa
         super.setSelectedMovie(selectedMovie);
     }
 
-    public void searchMovieButton(ActionEvent actionEvent) {
-        try {
-            editMetadataModel.search(movieID.getText());
-        } catch (MovieInfoException e) {
-            alertManager.displayError("Could not connect to The Movie Database","TMDB Might not be available right now");
-        }
-    }
 }

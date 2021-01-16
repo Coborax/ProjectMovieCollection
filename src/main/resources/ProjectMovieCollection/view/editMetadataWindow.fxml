@@ -16,7 +16,7 @@
                <HBox.margin>
                   <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
                </HBox.margin></JFXTextField>
-            <JFXButton buttonType="RAISED" minWidth="-Infinity" onAction="#searchMovieButton" text="Search">
+            <JFXButton buttonType="RAISED" minWidth="-Infinity" onAction="#searchForMovies" text="Search">
                <HBox.margin>
                   <Insets left="10.0" right="60.0" />
                </HBox.margin>
