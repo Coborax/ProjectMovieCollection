@@ -2,12 +2,12 @@ package ProjectMovieCollection.bll;
 
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
-import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
-import ProjectMovieCollection.dal.CategoryDAO;
+import ProjectMovieCollection.dal.MovieData.IMovieInfoProvider;
+import ProjectMovieCollection.dal.MovieData.MovieDBProvider;
+import ProjectMovieCollection.dal.CategoryDBRepository;
 import ProjectMovieCollection.dal.ICategoryRepository;
 import ProjectMovieCollection.dal.IMovieRepository;
-import ProjectMovieCollection.dal.MovieDAO;
+import ProjectMovieCollection.dal.MovieDBRepository;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
 import ProjectMovieCollection.utils.exception.MovieInfoException;
@@ -28,8 +28,8 @@ public class CategoryManager {
         //TODO: Throw to UI
         try {
             infoProvider = new MovieDBProvider();
-            categoryRepository = new CategoryDAO();
-            movieRepository = new MovieDAO();
+            categoryRepository = new CategoryDBRepository();
+            movieRepository = new MovieDBRepository();
         } catch (IOException e) {
             e.printStackTrace();
         }

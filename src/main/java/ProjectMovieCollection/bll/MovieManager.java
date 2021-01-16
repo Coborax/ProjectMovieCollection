@@ -1,10 +1,10 @@
 package ProjectMovieCollection.bll;
 
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
-import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.dal.MovieData.IMovieInfoProvider;
+import ProjectMovieCollection.dal.MovieData.MovieDBProvider;
 import ProjectMovieCollection.dal.IMovieRepository;
-import ProjectMovieCollection.dal.MovieDAO;
+import ProjectMovieCollection.dal.MovieDBRepository;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
@@ -28,7 +28,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         //TODO: Throw to UI
         try {
             infoProvider = new MovieDBProvider();
-            movieRepository = new MovieDAO();
+            movieRepository = new MovieDBRepository();
         } catch (IOException e) {
             e.printStackTrace();
         }

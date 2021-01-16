@@ -12,11 +12,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDAO implements ICategoryRepository {
+public class CategoryDBRepository implements ICategoryRepository {
 
     private DBConnector dbConnector;
 
-    public CategoryDAO() {
+    public CategoryDBRepository() {
         dbConnector = new DBConnector();
     }
 

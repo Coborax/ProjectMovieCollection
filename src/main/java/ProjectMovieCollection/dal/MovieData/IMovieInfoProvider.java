@@ -1,7 +1,8 @@
-package ProjectMovieCollection.bll.MovieData;
+package ProjectMovieCollection.dal.MovieData;
 
 import ProjectMovieCollection.be.MovieSearchResult;
 import ProjectMovieCollection.utils.exception.MovieInfoException;
+
 import java.util.List;
 
 public interface IMovieInfoProvider {
@@ -50,3 +51,4 @@ public interface IMovieInfoProvider {
     List<MovieSearchResult> search(String term) throws MovieInfoException;
 
 }
+

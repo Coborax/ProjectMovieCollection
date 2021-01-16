@@ -2,8 +2,8 @@ package ProjectMovieCollection.gui.model;
 
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.be.MovieSearchResult;
-import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
-import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.dal.MovieData.IMovieInfoProvider;
+import ProjectMovieCollection.dal.MovieData.MovieDBProvider;
 import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
 import ProjectMovieCollection.utils.exception.MovieInfoException;

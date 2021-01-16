@@ -13,11 +13,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieDAO implements IMovieRepository {
+public class MovieDBRepository implements IMovieRepository {
 
     private DBConnector dbConnector;
 
-    public MovieDAO() {
+    public MovieDBRepository() {
         dbConnector = new DBConnector();
     }
 
