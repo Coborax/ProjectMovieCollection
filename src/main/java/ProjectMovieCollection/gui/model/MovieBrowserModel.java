@@ -1,7 +1,6 @@
 /**
- *
- *
  * @author kjell
+ * @autor Mikkel
  */
 
 package ProjectMovieCollection.gui.model;
@@ -38,6 +37,9 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         movieList = FXCollections.observableArrayList();
     }
 
+    /**
+     * Loads data on a new thread
+     */
     public void loadAllData() {
         Thread t = new Thread(() -> {
             try {
@@ -72,11 +74,16 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         });
     }
 
-    public String getCategoryString(Movie m) {
+    /**
+     * Gets a string with categories for a movie
+     * @param movie movie of which you want the categories from
+     * @return String with categories
+     */
+    public String getCategoryString(Movie movie) {
         String categoryString = "";
-        for (Category c : m.getCategories()) {
-            if (!c.getName().equals("All")) {
-                categoryString += c.getName() + ", ";
+        for (Category category : movie.getCategories()) {
+            if (!category.getName().equals("All")) {
+                categoryString += category.getName() + ", ";
             }
         }
         return categoryString.substring(0, categoryString.lastIndexOf(","));
@@ -90,6 +97,10 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         return FXCollections.observableList(categoryManager.getAllCategories());
     }
 
+    /**
+     * Filters movies with a given category and adds them to a list of movies
+     * @param category The category to be filtered
+     */
     public void filterMovies(Category category) {
         List<Movie> movies = movieManager.getAllMovies();
         movieList.clear();
@@ -101,6 +112,12 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
         }
     }
 
+    /**
+     * Deletes a movie
+     * @param movie The movie to be deleted
+     * @throws MovieDAOException When connection to the database failed
+     * @throws IOException If it cannot find the file
+     */
     public void deleteMovie(Movie movie) throws MovieDAOException, IOException {
         movieManager.deleteMovie(movie);
         movieList.remove(movie);

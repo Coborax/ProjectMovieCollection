@@ -25,22 +25,27 @@ public class EditMetadataModel {
         infoProvider = new MovieDBProvider();
     }
 
+    /**
+     * Searches for a movie in The Movie Database
+     * @param term Term to be searched for
+     * @throws MovieInfoException Error if The Movie Database is unavailable
+     */
     public void search(String term) throws MovieInfoException {
         choices.clear();
         choices.addAll(infoProvider.search(term));
     }
 
-    public void updateFromMovieResult(MovieSearchResult m) throws MovieDAOException, MovieInfoException {
-        movie.setProviderID(m.getId());
-        movie.setTitle(m.getName());
-        try {
-            movie.setDesc(infoProvider.getMovieDesc(m.getId()));
-            movie.setImgPath(infoProvider.getMovieImage(m.getId()));
-        } catch (MovieInfoException e) {
-            throw new MovieInfoException("Could not connect to The Movie Database");
-        }
-
-
+    /**
+     * Updates the movie locally and in the programs database
+     * @param movieSearchResult The new movie
+     * @throws MovieDAOException Connection to the database failed
+     * @throws MovieInfoException Connection to The Movie Database failed
+     */
+    public void updateFromMovieResult(MovieSearchResult movieSearchResult) throws MovieDAOException, MovieInfoException {
+        movie.setProviderID(movieSearchResult.getId());
+        movie.setTitle(movieSearchResult.getName());
+        movie.setDesc(infoProvider.getMovieDesc(movieSearchResult.getId()));
+        movie.setImgPath(infoProvider.getMovieImage(movieSearchResult.getId()));
         movieManager.updateMovie(movie);
     }
 
