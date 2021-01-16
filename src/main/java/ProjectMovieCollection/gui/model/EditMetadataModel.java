@@ -44,13 +44,8 @@ public class EditMetadataModel {
     public void updateFromMovieResult(MovieSearchResult movieSearchResult) throws MovieDAOException, MovieInfoException {
         movie.setProviderID(movieSearchResult.getId());
         movie.setTitle(movieSearchResult.getName());
-        try {
-            movie.setDesc(infoProvider.getMovieDesc(movieSearchResult.getId()));
-            movie.setImgPath(infoProvider.getMovieImage(movieSearchResult.getId()));
-        } catch (MovieInfoException e) {
-            throw new MovieInfoException("Could not load all the data");
-        }
-
+        movie.setDesc(infoProvider.getMovieDesc(movieSearchResult.getId()));
+        movie.setImgPath(infoProvider.getMovieImage(movieSearchResult.getId()));
         movieManager.updateMovie(movie);
     }
 
