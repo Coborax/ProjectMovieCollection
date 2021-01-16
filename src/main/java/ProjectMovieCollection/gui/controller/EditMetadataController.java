@@ -9,7 +9,9 @@ import ProjectMovieCollection.be.MovieSearchResult;
 import ProjectMovieCollection.bll.AlertManager;
 import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.gui.model.EditMetadataModel;
+import ProjectMovieCollection.utils.exception.EmptySelectionException;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
+import ProjectMovieCollection.utils.exception.MovieInfoException;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
@@ -53,17 +55,29 @@ public class EditMetadataController extends BaseController implements Initializa
     }
 
     public void confirmButton(ActionEvent actionEvent) {
-        try {
-            editMetadataModel.updateFromMovieResult(relatedMovieList.getSelectionModel().getSelectedItem());
-        } catch (MovieDAOException e) {
-            alertManager.displayError("Could not connect to database","Check your internet connection!");
+        if (relatedMovieList.getSelectionModel().getSelectedItem() == null) {
+            try {
+                throw new EmptySelectionException("No movie selected");
+            } catch (EmptySelectionException e) {
+                alertManager.displayError("No movie selected", "Please select a movie before continuing!");
+            }
+        } else {
+            try {
+                editMetadataModel.updateFromMovieResult(relatedMovieList.getSelectionModel().getSelectedItem());
+            } catch (MovieDAOException | MovieInfoException e) {
+                alertManager.displayError("Could not connect to database", "Check your internet connection!");
+            }
+            Stage stage = (Stage) VBox.getScene().getWindow();
+            stage.close();
         }
-        Stage stage = (Stage) VBox.getScene().getWindow();
-        stage.close();
     }
 
     public void searchForMovies(ActionEvent actionEvent) {
-        editMetadataModel.search(movieID.getText());
+        try {
+            editMetadataModel.search(movieID.getText());
+        } catch (MovieInfoException e) {
+            alertManager.displayError("Could not connect to The Movie Database","TMDB Might not be available right now");
+        }
     }
 
     @Override
@@ -79,6 +93,10 @@ public class EditMetadataController extends BaseController implements Initializa
     }
 
     public void searchMovieButton(ActionEvent actionEvent) {
-        editMetadataModel.search(movieID.getText());
+        try {
+            editMetadataModel.search(movieID.getText());
+        } catch (MovieInfoException e) {
+            alertManager.displayError("Could not connect to The Movie Database","TMDB Might not be available right now");
+        }
     }
 }

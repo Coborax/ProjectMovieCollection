@@ -8,6 +8,7 @@ import ProjectMovieCollection.dal.MovieDBRepository;
 import ProjectMovieCollection.utils.events.EventHandler;
 import ProjectMovieCollection.utils.events.IMovieManagerListener;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
+import ProjectMovieCollection.utils.exception.MovieInfoException;
 import ProjectMovieCollection.utils.settings.Settings;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -40,7 +41,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
      * 3. Cleanup - Go through all movies, and check if it is missing on disk.
      * @throws MovieDAOException If there is an error with loading movies from persistent data storage
      */
-    public void loadMovies() throws MovieDAOException {
+    public void loadMovies() throws MovieDAOException, MovieInfoException {
         File dir = new File(Settings.DIRECTORY);
         int totalMovies = dir.listFiles().length;
         int loaded = 0;
@@ -116,7 +117,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
      * @param movieName The name of the movie
      * @return A movie with id -1, that has the data loaded from the provider
      */
-    public Movie loadDataFromProvider(File file, String movieName) {
+    public Movie loadDataFromProvider(File file, String movieName) throws MovieInfoException {
         int id = infoProvider.guessMovie(movieName);
         Movie m;
 
@@ -128,6 +129,7 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
         } else {
             m = new Movie(-1, FilenameUtils.getName(file.getPath()), file.getPath());
         }
+
         return m;
     }
 

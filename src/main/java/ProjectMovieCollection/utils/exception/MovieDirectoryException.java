@@ -4,6 +4,9 @@
 
 package ProjectMovieCollection.utils.exception;
 
+/**
+ * Gets thrown whenever theres an issue with directory selection.
+ */
 public class MovieDirectoryException extends Exception {
 
     public MovieDirectoryException(String message) {

@@ -6,10 +6,12 @@ import ProjectMovieCollection.dal.MovieData.IMovieInfoProvider;
 import ProjectMovieCollection.dal.MovieData.MovieDBProvider;
 import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
+import ProjectMovieCollection.utils.exception.MovieInfoException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+
 
 public class EditMetadataModel {
 
@@ -23,16 +25,21 @@ public class EditMetadataModel {
         infoProvider = new MovieDBProvider();
     }
 
-    public void search(String term) {
+    public void search(String term) throws MovieInfoException {
         choices.clear();
         choices.addAll(infoProvider.search(term));
     }
 
-    public void updateFromMovieResult(MovieSearchResult m) throws MovieDAOException {
+    public void updateFromMovieResult(MovieSearchResult m) throws MovieDAOException, MovieInfoException {
         movie.setProviderID(m.getId());
         movie.setTitle(m.getName());
-        movie.setDesc(infoProvider.getMovieDesc(m.getId()));
-        movie.setImgPath(infoProvider.getMovieImage(m.getId()));
+        try {
+            movie.setDesc(infoProvider.getMovieDesc(m.getId()));
+            movie.setImgPath(infoProvider.getMovieImage(m.getId()));
+        } catch (MovieInfoException e) {
+            throw new MovieInfoException("Could not connect to The Movie Database");
+        }
+
 
         movieManager.updateMovie(movie);
     }

@@ -10,6 +10,7 @@ import ProjectMovieCollection.dal.IMovieRepository;
 import ProjectMovieCollection.dal.MovieDBRepository;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
+import ProjectMovieCollection.utils.exception.MovieInfoException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class CategoryManager {
      * @throws CategoryDAOException
      * @throws MovieDAOException
      */
-    public void loadCategoriesFromMovieList(List<Movie> movies) throws CategoryDAOException, MovieDAOException {
+    public void loadCategoriesFromMovieList(List<Movie> movies) throws CategoryDAOException, MovieDAOException, MovieInfoException {
         for (Movie m : movies) {
             if (m.getCategories().size() == 0) {
                 loadCategoriesFromMovie(m);
@@ -60,7 +61,7 @@ public class CategoryManager {
      * @throws CategoryDAOException If there is an error creating new categories on the data storage
      * @throws MovieDAOException If there is an error adding a new category to the movie in the data storage
      */
-    private void loadCategoriesFromMovie(Movie m) throws CategoryDAOException, MovieDAOException {
+    private void loadCategoriesFromMovie(Movie m) throws CategoryDAOException, MovieDAOException, MovieInfoException {
         List<String> categoryStrings = new ArrayList<>();
         m.addCategory(categories.get(0));
 

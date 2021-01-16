@@ -22,11 +22,9 @@ public class ChooseDirectoryController {
     @FXML private VBox vBox;
     @FXML private TextField directoryTextField;
 
-    DirectoryModel dm = new DirectoryModel();
-    AlertManager am = new AlertManager();
-
+    private final DirectoryModel directoryModel = new DirectoryModel();
+    private final AlertManager alertManager = new AlertManager();
     private final DirectoryChooser dir = new DirectoryChooser();
-
 
     public void browseButtonAction(ActionEvent actionEvent) {
         try {
@@ -42,20 +40,18 @@ public class ChooseDirectoryController {
         }
     }
 
-
     /**
      * Throws exception if confirmation failed, then displays an alert to inform the user of the error.
      * @param actionEvent
      */
     public void confirmButtonAction(ActionEvent actionEvent) {
         try {
-            dm.confirm();
+            directoryModel.confirm();
             App.setRoot("view/primary", 1280, 720);
         } catch (MovieDirectoryException e) {
-            am.displayError("No Directory Selected","Please select a directory before continuing.");
+            alertManager.displayError("No Directory Selected","Please select a directory before continuing.");
         } catch (IOException e) {
-            am.displayError("Could not load next window", "Could not load next window");
-            e.printStackTrace();
+            alertManager.displayError("Could not connect to the database", "Check your internet connection!");
         }
     }
 }
