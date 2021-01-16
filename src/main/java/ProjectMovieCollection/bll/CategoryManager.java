@@ -53,6 +53,21 @@ public class CategoryManager {
             //Add all category
             m.addCategory(categories.get(0));
         }
+
+        //Cleanup
+        for (Category c : categories) {
+            boolean hasMovies = false;
+            for (Movie m : movies) {
+                if (m.getCategories().contains(c)) {
+                    hasMovies = true;
+                }
+            }
+
+            if (!hasMovies) {
+                categoryRepository.delete(c);
+                categories.remove(c);
+            }
+        }
     }
 
     /**
