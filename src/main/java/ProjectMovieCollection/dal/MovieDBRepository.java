@@ -93,12 +93,14 @@ public class MovieDBRepository implements IMovieRepository {
                     String imgPath = resultSet.getString("imgPath");
                     int providerID = resultSet.getInt("providerID");
                     String desc = resultSet.getString("description");
+                    int rating = resultSet.getInt("rating");
 
                     Movie movie = new Movie(id, title, filepath);
                     movie.setImgPath(imgPath);
                     movie.setProviderID(providerID);
                     movie.setDesc(desc);
                     movie.setCategories(getCategories(movie));
+                    movie.setRating(rating);
                     allMovies.add(movie);
                 }
             }
