@@ -1,6 +1,6 @@
 package ProjectMovieCollection;
 
-import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.dal.MovieData.MovieDBProvider;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;

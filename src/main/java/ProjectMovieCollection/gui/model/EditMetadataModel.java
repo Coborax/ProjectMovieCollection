@@ -2,16 +2,14 @@ package ProjectMovieCollection.gui.model;
 
 import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.be.MovieSearchResult;
-import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
-import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.dal.MovieData.IMovieInfoProvider;
+import ProjectMovieCollection.dal.MovieData.MovieDBProvider;
 import ProjectMovieCollection.bll.MovieManager;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EditMetadataModel {
 

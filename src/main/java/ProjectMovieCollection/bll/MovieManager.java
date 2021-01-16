@@ -1,8 +1,8 @@
 package ProjectMovieCollection.bll;
 
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
-import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.dal.MovieData.IMovieInfoProvider;
+import ProjectMovieCollection.dal.MovieData.MovieDBProvider;
 import ProjectMovieCollection.dal.IMovieRepository;
 import ProjectMovieCollection.dal.MovieDBRepository;
 import ProjectMovieCollection.utils.events.EventHandler;

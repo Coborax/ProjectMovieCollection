@@ -1,9 +1,7 @@
-package ProjectMovieCollection.bll.MovieData;
+package ProjectMovieCollection.dal.MovieData;
 
-import ProjectMovieCollection.be.Movie;
 import ProjectMovieCollection.be.MovieSearchResult;
 
-import java.io.File;
 import java.util.List;
 
 public interface IMovieInfoProvider {

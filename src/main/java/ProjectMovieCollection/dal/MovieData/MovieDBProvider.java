@@ -1,4 +1,4 @@
-package ProjectMovieCollection.bll.MovieData;
+package ProjectMovieCollection.dal.MovieData;
 
 import java.io.IOException;
 import java.util.ArrayList;

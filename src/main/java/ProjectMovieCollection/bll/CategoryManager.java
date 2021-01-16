@@ -2,8 +2,8 @@ package ProjectMovieCollection.bll;
 
 import ProjectMovieCollection.be.Category;
 import ProjectMovieCollection.be.Movie;
-import ProjectMovieCollection.bll.MovieData.IMovieInfoProvider;
-import ProjectMovieCollection.bll.MovieData.MovieDBProvider;
+import ProjectMovieCollection.dal.MovieData.IMovieInfoProvider;
+import ProjectMovieCollection.dal.MovieData.MovieDBProvider;
 import ProjectMovieCollection.dal.CategoryDBRepository;
 import ProjectMovieCollection.dal.ICategoryRepository;
 import ProjectMovieCollection.dal.IMovieRepository;
