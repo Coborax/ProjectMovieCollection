@@ -52,3 +52,4 @@ public interface IMovieInfoProvider {
     List<MovieSearchResult> search(String term);
 
 }
+
