@@ -20,7 +20,6 @@ import com.jfoenix.controls.JFXTextArea;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -126,12 +125,6 @@ public class PrimaryController extends BaseController implements Initializable, 
             }
         });
 
-        movieList.getItems().addListener(new ListChangeListener<Movie>() {
-            @Override
-            public void onChanged(Change<? extends Movie> change) {
-                movieList.setItems(movieBrowserModel.getObservableMovieList());
-            }
-        });
     }
 
     /**
@@ -158,7 +151,7 @@ public class PrimaryController extends BaseController implements Initializable, 
     }
 
     /**
-     * Sets the main content to visible again.
+     * Sets the main content to visible
      */
     @Override
     public void dataFetched() {
@@ -178,7 +171,7 @@ public class PrimaryController extends BaseController implements Initializable, 
     }
 
     /**
-     * Opens a new window depending
+     * Opens a new window
      * @param title The windows title
      * @param fxml The windows fxml file
      */
@@ -200,10 +193,12 @@ public class PrimaryController extends BaseController implements Initializable, 
             controller.setMovieManager(getMovieManager());
             controller.setSelectedMovie(getSelectedMovie());
 
+            // Setup a new stage
             Stage stage = new Stage();
             stage.setTitle(title);
             stage.centerOnScreen();
             stage.setResizable(false);
+            // Mode changed to APPLICATION_MODAL, so the user can't click out of the window
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.showAndWait();
@@ -231,7 +226,7 @@ public class PrimaryController extends BaseController implements Initializable, 
     }
 
     /**
-     * Deletes the selected movie, warns the user beforehand that it's irreversible
+     * Deletes the selected movie, warns the user beforehand that this action is irreversible
      * @param actionEvent
      */
     public void deleteMovie(ActionEvent actionEvent) {
@@ -259,7 +254,11 @@ public class PrimaryController extends BaseController implements Initializable, 
                 alert.close();
             }
         } else {
-            alertManager.displayError("No movie selected","Please select a movie!");
+            try {
+                throw new EmptySelectionException("No movie selected");
+            } catch (EmptySelectionException e) {
+                alertManager.displayError("No movie selected","Please select a movie!");
+            }
         }
     }
 
