@@ -145,7 +145,7 @@ public class PrimaryController extends BaseController implements Initializable, 
                 movieBrowserModel.filterMovies(categoryList.getSelectionModel().getSelectedItems());
             }
         });
-        
+
         minRating.getSelectionModel().select(0);
     }
 

@@ -45,8 +45,8 @@
                   </Label>
                   <TableView fx:id="movieTableView" prefHeight="655.0" prefWidth="278.0">
                      <columns>
-                        <TableColumn fx:id="titleColumn" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Title" />
-                        <TableColumn fx:id="ratingColumn" prefWidth="75.0" text="Rating" />
+                        <TableColumn fx:id="titleColumn" maxWidth="-1.0" minWidth="195.0" prefWidth="-1.0" resizable="false" text="Title" />
+                        <TableColumn fx:id="ratingColumn" maxWidth="-1.0" minWidth="70.0" prefWidth="-1.0" resizable="false" text="Rating" />
                      </columns>
                   </TableView>
                </children>
