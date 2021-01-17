@@ -61,28 +61,10 @@ public class EditWindowController extends BaseController implements Initializabl
 
     }
 
-    @Override
-    public void setMovieManager(MovieManager movieManager) {
-        editMovieModel.setMovieManager(movieManager);
-        super.setMovieManager(movieManager);
-    }
-
-    @Override
-    public void setSelectedMovie(Movie selectedMovie) {
-        titleTextField.setText(selectedMovie.getTitle());
-        descriptionTextArea.setText(selectedMovie.getDesc());
-
-        if (selectedMovie.getRating() != -1) {
-            ratingBox.setPromptText(String.valueOf(selectedMovie.getRating()));
-        } else {
-            ratingBox.setPromptText("Not rated");
-        }
-
-        editMovieModel.setMovie(selectedMovie);
-        super.setSelectedMovie(selectedMovie);
-    }
-
-
+    /**
+     * Updates the title, description and rating of a movie if changed. Closes the window
+     * @param actionEvent
+     */
     public void confirmButton(ActionEvent actionEvent) {
         title = titleTextField.getText();
         description = descriptionTextArea.getText();
@@ -99,4 +81,36 @@ public class EditWindowController extends BaseController implements Initializabl
         Stage stage = (Stage) VBox.getScene().getWindow();
         stage.close();
     }
+
+    /**
+     * Sets the movie manager for this controller
+     * @param movieManager The movie manager to be set
+     */
+    @Override
+    public void setMovieManager(MovieManager movieManager) {
+        editMovieModel.setMovieManager(movieManager);
+        super.setMovieManager(movieManager);
+    }
+
+    /**
+     * Sets the selected movie for this controller
+     * @param selectedMovie The selected movie
+     */
+    @Override
+    public void setSelectedMovie(Movie selectedMovie) {
+        // Sets the title and description in the edit window from the selected movie
+        titleTextField.setText(selectedMovie.getTitle());
+        descriptionTextArea.setText(selectedMovie.getDesc());
+
+        // Sets the rating in the combobox as prompt text, if the rating is -1 it will be shown as not rated
+        if (selectedMovie.getRating() != -1) {
+            ratingBox.setPromptText(String.valueOf(selectedMovie.getRating()));
+        } else {
+            ratingBox.setPromptText("Not rated");
+        }
+
+        editMovieModel.setMovie(selectedMovie);
+        super.setSelectedMovie(selectedMovie);
+    }
+
 }

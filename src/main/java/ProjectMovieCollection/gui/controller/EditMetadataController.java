@@ -97,12 +97,20 @@ public class EditMetadataController extends BaseController implements Initializa
         }
     }
 
+    /**
+     * Sets the movie manager for this controller
+     * @param movieManager The movie manager to be set
+     */
     @Override
     public void setMovieManager(MovieManager movieManager) {
         editMetadataModel.setMovieManager(movieManager);
         super.setMovieManager(movieManager);
     }
 
+    /**
+     * Sets the selected movie for this controller
+     * @param selectedMovie The selected movie
+     */
     @Override
     public void setSelectedMovie(Movie selectedMovie) {
         editMetadataModel.setMovie(selectedMovie);
