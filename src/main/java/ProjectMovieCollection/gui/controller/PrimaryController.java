@@ -93,6 +93,7 @@ public class PrimaryController extends BaseController implements Initializable, 
         mainContent.managedProperty().bind(mainContent.visibleProperty());
         loader.managedProperty().bind(loader.visibleProperty());
 
+
         movieBrowserModel.addListener(this);
         movieBrowserModel.loadAllData();
         posterPlaceholder = moviePoster.getImage();
@@ -144,7 +145,8 @@ public class PrimaryController extends BaseController implements Initializable, 
                 movieBrowserModel.filterMovies(categoryList.getSelectionModel().getSelectedItems());
             }
         });
-
+        
+        minRating.getSelectionModel().select(0);
     }
 
     /**
