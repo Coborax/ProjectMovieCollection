@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXSpinner?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox fx:id="VBox" styleClass="mainContent" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProjectMovieCollection.gui.controller.PrimaryController">
    <children>
-      <HBox fx:id="mainContent" alignment="CENTER" prefHeight="720.0" prefWidth="1280.0" spacing="10.0">
+      <HBox fx:id="mainContent" alignment="CENTER" prefHeight="672.0" prefWidth="1280.0" spacing="10.0">
          <children>
             <VBox>
                <children>
@@ -21,10 +27,10 @@
                         <Insets bottom="5.0" />
                      </padding>
                   </Label>
-                  <JFXListView fx:id="categoryList" prefWidth="300.0" VBox.vgrow="ALWAYS" />
+                  <JFXListView fx:id="categoryList" maxHeight="-Infinity" prefHeight="640.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <VBox>
+            <VBox fillWidth="false">
                <children>
                   <Label text="Movies">
                      <font>
@@ -34,87 +40,80 @@
                         <Insets bottom="5.0" />
                      </padding>
                   </Label>
-                  <JFXListView fx:id="movieList" prefWidth="300.0" VBox.vgrow="ALWAYS" />
+                  <JFXListView fx:id="movieList" layoutX="4.0" maxHeight="-Infinity" prefHeight="640.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <HBox spacing="10.0" HBox.hgrow="ALWAYS">
-               <HBox.margin>
-                  <Insets top="30.0" />
-               </HBox.margin>
+            <VBox spacing="10.0">
                <children>
-                  <VBox spacing="10.0">
+                  <ImageView fx:id="moviePoster" fitHeight="400.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                     <image>
+                        <Image url="@../img/poster.jpg" />
+                     </image>
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <VBox spacing="8.0">
                      <children>
-                        <ImageView fx:id="moviePoster" fitHeight="400.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
-                           <image>
-                              <Image url="@../img/poster.jpg" />
-                           </image>
-                           <VBox.margin>
-                              <Insets top="2.0" />
-                           </VBox.margin>
-                        </ImageView>
-                        <VBox spacing="10.0">
-                           <children>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#openMetadataWindow" text="Choose different metadata">
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </JFXButton>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#openEditWindow" text="Edit">
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </JFXButton>
-                              <JFXButton buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#deleteMovie" text="Delete">
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </JFXButton>
-                              <TextField fx:id="searchBox" promptText="Search">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </TextField>
-                              <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="112.0" maxWidth="1.7976931348623157E308" onAction="#searchMovie" text="Search">
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </JFXButton>
-                           </children>
-                        </VBox>
-                     </children>
-                  </VBox>
-                  <VBox spacing="10.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label fx:id="movieTitle" prefHeight="50.0" prefWidth="429.0">
+                        <JFXButton buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#openMetadataWindow" text="Choose different metadata">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </JFXButton>
+                        <JFXButton buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#openEditWindow" text="Edit">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </JFXButton>
+                        <JFXButton buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#deleteMovie" text="Delete">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </JFXButton>
+                        <TextField fx:id="searchBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Search">
                            <font>
-                              <Font name="System Bold" size="34.0" />
+                              <Font size="15.0" />
                            </font>
-                        </Label>
-                        <Label fx:id="movieRating">
-                           <font>
-                              <Font size="22.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="categories">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <JFXTextArea fx:id="movieDesc" editable="false" prefHeight="205.0" prefWidth="428.0">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </JFXTextArea>
+                        </TextField>
+                        <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="112.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#searchMovie" text="Search">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </JFXButton>
                      </children>
                   </VBox>
                </children>
-            </HBox>
+            </VBox>
+            <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="movieTitle" prefHeight="50.0" prefWidth="429.0">
+                     <font>
+                        <Font name="System Bold" size="34.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="movieRating">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="categories">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <JFXTextArea fx:id="movieDesc" editable="false" prefHeight="205.0" prefWidth="428.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </JFXTextArea>
+               </children>
+            </VBox>
          </children>
          <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
-      <VBox fx:id="loader" alignment="CENTER" maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" spacing="20.0">
+      <VBox fx:id="loader" alignment="CENTER" maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" spacing="14.0">
          <children>
             <JFXSpinner fx:id="spinner" prefHeight="343.0" prefWidth="305.0" progress="0.0" radius="200.0" />
             <Label text="Loading please wait...">
