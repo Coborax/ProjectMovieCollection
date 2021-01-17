@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieBrowserModel extends EventHandler<IMovieModelListener> implements IMovieManagerListener {
@@ -98,15 +99,34 @@ public class MovieBrowserModel extends EventHandler<IMovieModelListener> impleme
     }
 
     /**
-     * Filters movies with a given category and adds them to a list of movies
+     * Filters movies with a given category and adds them to the list of movies
      * @param category The category to be filtered
      */
-    public void filterMovies(Category category) {
+    public void filterMovies(List<Category> categories) {
         List<Movie> movies = movieManager.getAllMovies();
         movieList.clear();
 
         for (Movie m : movies) {
-            if (m.getCategories().contains(category) && !movieList.contains(m)) {
+            for (Category c : categories) {
+                if (m.getCategories().contains(c) && !movieList.contains(m)) {
+                    movieList.add(m);
+                }
+            }
+        }
+    }
+
+    /**
+     * Filters movies with a given category, and search term and adds them to the list of movies
+     * @param category The category to be filtered
+     */
+    public void filterMovies(List<Category> categories, String term, int minRating) {
+        filterMovies(categories);
+
+        List<Movie> movies = new ArrayList<>(movieList);
+        movieList.clear();
+
+        for (Movie m : movies) {
+            if (m.getTitle().toLowerCase().contains(term.toLowerCase()) && m.getRating() >= minRating) {
                 movieList.add(m);
             }
         }

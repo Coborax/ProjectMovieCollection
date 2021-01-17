@@ -15,8 +15,7 @@ import ProjectMovieCollection.utils.events.IMovieModelListener;
 import ProjectMovieCollection.utils.exception.EmptySelectionException;
 import ProjectMovieCollection.utils.exception.MovieDAOException;
 import ProjectMovieCollection.utils.exception.CategoryDAOException;
-import com.jfoenix.controls.JFXSpinner;
-import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -28,6 +27,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -47,8 +47,6 @@ public class PrimaryController extends BaseController implements Initializable, 
     @FXML
     private Label categories;
     @FXML
-    private ListView<Movie> movieList;
-    @FXML
     private ListView<Category> categoryList;
     @FXML
     private HBox mainContent;
@@ -60,6 +58,16 @@ public class PrimaryController extends BaseController implements Initializable, 
     private Label movieRating;
     @FXML
     private TextField searchBox;
+    @FXML
+    private JFXComboBox<Integer> minRating;
+
+    @FXML
+    private TableView<Movie> movieTableView;
+    @FXML
+    private TableColumn<Movie, String> titleColumn;
+    @FXML
+    private TableColumn<Movie, String> ratingColumn;
+
 
     private Image posterPlaceholder;
 
@@ -89,8 +97,19 @@ public class PrimaryController extends BaseController implements Initializable, 
         movieBrowserModel.loadAllData();
         posterPlaceholder = moviePoster.getImage();
 
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
+        movieTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        movieTableView.setItems(movieBrowserModel.getObservableMovieList());
+
+        for (int i = 0; i < 10; i++) {
+            minRating.getItems().add(i + 1);
+        }
+
+
         // Listener that changes updates the movie UI (title, description and rating)
-        movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
+        movieTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
             @Override
             public void changed(ObservableValue<? extends Movie> observable, Movie oldValue, Movie newValue) {
                 if (newValue != null) {
@@ -108,20 +127,21 @@ public class PrimaryController extends BaseController implements Initializable, 
         });
 
         // Opens a movie if double clicked.
-        movieList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        movieTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
-                    App.getHost().showDocument(movieList.getSelectionModel().getSelectedItem().getFilepath());
+                    App.getHost().showDocument(movieTableView.getSelectionModel().getSelectedItem().getFilepath());
                 }
             }
         });
 
         // Filters movies when a new category is selected
+        categoryList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         categoryList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Category>() {
             @Override
             public void changed(ObservableValue<? extends Category> observableValue, Category category, Category t1) {
-                movieBrowserModel.filterMovies(t1);
+                movieBrowserModel.filterMovies(categoryList.getSelectionModel().getSelectedItems());
             }
         });
 
@@ -148,6 +168,9 @@ public class PrimaryController extends BaseController implements Initializable, 
         } catch (Exception e) {
             moviePoster.setImage(posterPlaceholder);
         }
+
+        movieTableView.refresh();
+        movieTableView.sort();
     }
 
     /**
@@ -155,7 +178,7 @@ public class PrimaryController extends BaseController implements Initializable, 
      */
     @Override
     public void dataFetched() {
-        movieList.setItems(movieBrowserModel.getObservableMovieList());
+        movieTableView.setItems(movieBrowserModel.getObservableMovieList());
         categoryList.setItems(movieBrowserModel.getObservableCategoryList());
         loader.setVisible(false);
         mainContent.setVisible(true);
@@ -176,7 +199,7 @@ public class PrimaryController extends BaseController implements Initializable, 
      * @param fxml The windows fxml file
      */
     public void showNewWindow(String title, String fxml) {
-        if (movieList.getSelectionModel().getSelectedItem() != null) {
+        if (movieTableView.getSelectionModel().getSelectedItem() != null) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/ProjectMovieCollection/view/" + fxml));
 
@@ -203,10 +226,10 @@ public class PrimaryController extends BaseController implements Initializable, 
             stage.setScene(scene);
             stage.showAndWait();
 
-            updateUIToMovie(movieList.getSelectionModel().getSelectedItem());
+            updateUIToMovie(movieTableView.getSelectionModel().getSelectedItem());
             // Update title in the movies listview
-            movieList.getSelectionModel().clearSelection();
-            movieList.getSelectionModel().select(movieList.getSelectionModel().getSelectedItem());
+            movieTableView.getSelectionModel().clearSelection();
+            movieTableView.getSelectionModel().select(movieTableView.getSelectionModel().getSelectedItem());
 
         } else {
             try {
@@ -219,10 +242,12 @@ public class PrimaryController extends BaseController implements Initializable, 
 
     public void openMetadataWindow(ActionEvent actionEvent) {
         showNewWindow("Edit Metadata","editMetadataWindow.fxml");
+        updateUIToMovie(getSelectedMovie());
     }
 
     public void openEditWindow(ActionEvent actionEvent) {
         showNewWindow("Edit Movie","editMovieWindow.fxml");
+        updateUIToMovie(getSelectedMovie());
     }
 
     /**
@@ -230,11 +255,11 @@ public class PrimaryController extends BaseController implements Initializable, 
      * @param actionEvent
      */
     public void deleteMovie(ActionEvent actionEvent) {
-        if (movieList.getSelectionModel().getSelectedItem() != null) {
+        if (movieTableView.getSelectionModel().getSelectedItem() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
             alert.setTitle("Delete Movie");
-            alert.setHeaderText("You are about to delete \"" + movieList.getSelectionModel().getSelectedItem() + "\"");
+            alert.setHeaderText("You are about to delete \"" + movieTableView.getSelectionModel().getSelectedItem() + "\"");
             alert.setContentText("Are you sure you want to delete this movie? This cannot be reverted");
             alert.initModality(Modality.APPLICATION_MODAL);
 
@@ -242,13 +267,13 @@ public class PrimaryController extends BaseController implements Initializable, 
 
             if (result.get() == ButtonType.OK) {
                 try {
-                    movieBrowserModel.deleteMovie(movieList.getSelectionModel().getSelectedItem());
-                    movieList.setItems(movieBrowserModel.getObservableMovieList());
+                    movieBrowserModel.deleteMovie(movieTableView.getSelectionModel().getSelectedItem());
+                    movieTableView.setItems(movieBrowserModel.getObservableMovieList());
                 } catch (MovieDAOException e) {
                     alertManager.displayError("Could not connect to database", "Check your internet connection");
                 } catch (IOException e) {
                     alertManager.displayError("An Error Occurred", "Unable to delete movie" +
-                            movieList.getSelectionModel().getSelectedItem());
+                            movieTableView.getSelectionModel().getSelectedItem());
                 }
             } else {
                 alert.close();
@@ -267,18 +292,8 @@ public class PrimaryController extends BaseController implements Initializable, 
      * @param actionEvent
      */
     public void searchMovie(ActionEvent actionEvent){
-        String searchFilter = searchBox.getText().toLowerCase();
-
-        ObservableList<Movie> allMovieList = FXCollections.observableArrayList(movieBrowserModel.getObservableMovieList());
-        ObservableList<Movie> filterMovie = FXCollections.observableArrayList();
-
-        for (Movie m : allMovieList) {
-            if (m.getTitle().toLowerCase().contains(searchFilter)){
-                filterMovie.add(m);
-            }
-        }
-        movieList.setItems(filterMovie);
-
+        movieBrowserModel.filterMovies(categoryList.getSelectionModel().getSelectedItems(), searchBox.getText(), minRating.getSelectionModel().getSelectedItem());
+        movieTableView.sort();
     }
 
     /**

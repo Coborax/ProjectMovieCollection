@@ -31,6 +31,11 @@ public class Category {
         return name;
     }
 
+    /**
+     * Compares based on ID instead of the objects hash code
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null || getClass() != obj.getClass()) {
