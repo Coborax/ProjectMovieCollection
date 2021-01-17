@@ -17,6 +17,10 @@ public abstract class ConfigReader {
         loadConfig();
     }
 
+    /**
+     * Loads the config file
+     * @throws IOException If there is a problem reading the file
+     */
     private void loadConfig() throws IOException {
         try {
             properties = new Properties();

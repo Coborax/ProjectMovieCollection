@@ -13,6 +13,13 @@ public class EditMovieModel {
     private MovieManager movieManager;
     private Movie movie;
 
+    /**
+     * Updates a movie with the given parameters
+     * @param title The new title
+     * @param description The new description
+     * @param rating The new rating
+     * @throws MovieDAOException If there is an error when calling the database
+     */
     public void updateMovie(String title, String description, String rating) throws MovieDAOException {
         if (title != null) {
             movie.setTitle(title);

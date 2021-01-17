@@ -81,6 +81,7 @@ public class MovieDBProvider implements IMovieInfoProvider {
         return categories;
     }
 
+    @Override
     public int guessMovie(String title) throws MovieInfoException {
         TmdbSearch search = new TmdbApi(config.getAPIKey()).getSearch();
         MovieResultsPage resultsPage = search.searchMovie(title, 0, null, true, 0);
@@ -92,6 +93,7 @@ public class MovieDBProvider implements IMovieInfoProvider {
         throw new MovieDbException("Could not guess a movie");
     }
 
+    @Override
     public List<MovieSearchResult> search(String term) throws MovieInfoException {
         List<MovieSearchResult> result = new ArrayList<>();
 

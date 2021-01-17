@@ -25,7 +25,6 @@ public class MovieManager extends EventHandler<IMovieManagerListener> {
     private IMovieRepository movieRepository;
 
     public MovieManager() {
-        //TODO: Throw to UI
         try {
             infoProvider = new MovieDBProvider();
             movieRepository = new MovieDBRepository();
